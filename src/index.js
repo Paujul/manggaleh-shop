@@ -3,9 +3,12 @@ import ReactDOM from "react-dom/client";
 import "./styles/index.css";
 import App from "./components/App";
 
+import { ApolloProvider } from "@apollo/client";
+import apollo from "./apollo/apollo";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <ApolloProvider client={apollo}>
     <App />
-  </React.StrictMode>
+  </ApolloProvider>
 );
