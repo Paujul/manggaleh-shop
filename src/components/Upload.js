@@ -8,11 +8,8 @@ const Upload = () => {
   const handleFile = (file) => {
     console.log(file[0]);
     setImgFile(file[0]);
-    // console.log(e[0]);
-    // console.log(fileUpload);
   };
 
-  const URL = "https://res.cloudinary.com/dkha2cdtw/image/upload/";
   const [addBarang] = useMutation(POST_BARANG, {
     updateQueries: { query: SUB_BARANG },
   });

@@ -1,27 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import RenderUser from "./RenderUser";
 import RenderEdit from "./RenderEdit";
 
+import { GET_BARANG } from "../../apollo/Query";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBarang, getItem } from "../../redux/barangSlice";
+// import { TableError, TableLoading } from "./TableLoading";
+import { useQuery } from "@apollo/client";
+
 const User = () => {
-  const baseData = {
-    id: "",
-    nama: "",
-    qty: "",
-    price: "",
-  };
-  const [data, setData] = useState(baseData);
-  console.log(baseData);
-  //   console.log(data.barang);
-  const [edit, setEdit] = useState(false);
-  const toggleEdit = (id) => {
-    console.log(edit);
-    setEdit(!toggleEdit);
-    setData({ ...data, id: id });
-    console.log(id);
-  };
+  const items = useSelector((state) => state.items.items);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBarang());
+  }, []);
 
   return (
     <>
@@ -49,7 +45,10 @@ const User = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <RenderUser isEdit={edit} toggleEdit={(e) => toggleEdit(e)} />
+                  {items.map((item, index) => (
+                    <RenderUser key={item.id} item={item} index={index} />
+                  ))}
+                  {/* <RenderUser isEdit={edit} toggleEdit={(e) => toggleEdit(e)} /> */}
                 </tbody>
               </table>
             </div>

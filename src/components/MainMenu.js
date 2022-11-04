@@ -3,12 +3,15 @@ import Loading from "./Loading";
 
 import { useQuery, useSubscription } from "@apollo/client";
 import { GET_BARANG, SUB_BARANG } from "../apollo/Query";
+import { useDispatch, useSelector } from "react-redux";
 
 const MainMenu = () => {
   const { data, loading, error } = useSubscription(SUB_BARANG);
+
   const renderCard = () => {
     if (loading) return <Loading />;
     if (error) return <p>Something went wrong</p>;
+
     return data.barang.map((barang) => {
       return <Card key={barang.id} barang={barang} />;
     });
