@@ -30,10 +30,10 @@ export const POST_BARANG = gql`
 `;
 
 export const UDPATE_BARANG = gql`
-  mutation UpdateBarang($id: Int!, $nama: String, $qty: Int) {
+  mutation UpdateBarang($id: Int!, $nama: String, $qty: Int, $price: Int) {
     update_barang_by_pk(
       pk_columns: { id: $id }
-      _set: { nama: $nama, qty: $qty }
+      _set: { nama: $nama, qty: $qty, price: $price }
     ) {
       id
       nama

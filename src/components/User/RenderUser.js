@@ -5,11 +5,12 @@ import { GET_BARANG, DELETE_BARANG } from "../../apollo/Query";
 import { NumericFormat } from "react-number-format";
 import { TableError, TableLoading } from "./TableLoading";
 
-import { getItem, toggleEdit } from "../../redux/barangSlice";
-import { useDispatch } from "react-redux";
+import { editItem, getItem, toggleEdit } from "../../redux/barangSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const RenderUser = ({ item, index }) => {
-  console.log(item);
+  const items = useSelector((state) => state.items.items);
+
   const [deleteBarang] = useMutation(DELETE_BARANG, {
     refetchQueries: [{ query: GET_BARANG }],
   });
@@ -18,8 +19,26 @@ const RenderUser = ({ item, index }) => {
   };
 
   const dispatch = useDispatch();
+
+  const editData = (data) => {
+    // console.log(items[data].id);
+    if (items[data].isEdit === true) {
+      console.log("awe");
+    }
+    dispatch(
+      editItem({
+        id: items[data].id,
+        nama: item.nama,
+        qty: item.qty,
+        price: item.price,
+      })
+    );
+  };
+
   const edit = (id) => {
+    console.log(id);
     dispatch(toggleEdit(id));
+    editData(id);
   };
 
   return (

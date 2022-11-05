@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import RenderUser from "./RenderUser";
 import RenderEdit from "./RenderEdit";
 
-import { GET_BARANG } from "../../apollo/Query";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBarang, getItem } from "../../redux/barangSlice";
-// import { TableError, TableLoading } from "./TableLoading";
-import { useQuery } from "@apollo/client";
 
 const User = () => {
   const items = useSelector((state) => state.items.items);

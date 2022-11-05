@@ -1,20 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UDPATE_BARANG, SUB_BARANG } from "../../apollo/Query";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBarang } from "../../redux/barangSlice";
 
-const RenderEdit = ({ id }) => {
+const RenderEdit = () => {
+  const editState = useSelector((state) => state.items.edit);
+  const dispatch = useDispatch();
+
   const [updateBarang] = useMutation(UDPATE_BARANG, {
     updateQueries: { query: SUB_BARANG },
   });
 
+  const handleReset = () => {
+    const emptyData = {
+      nama: "",
+      qty: "",
+      price: "",
+    };
+    setData(emptyData);
+    console.log(data);
+  };
+
   const [toggleEdit, setToggleEdit] = useState(false);
   const baseData = {
-    id: id,
-    nama: "",
-    qty: "",
-    price: "",
+    id: editState.id,
+    nama: editState.nama,
+    qty: editState.qty,
+    price: editState.price,
   };
   const [data, setData] = useState(baseData);
+
+  useEffect(() => {
+    setData(baseData);
+  }, [editState]);
 
   const handleNama = (e) => {
     setData({ ...data, nama: e.target.value });
@@ -26,22 +45,25 @@ const RenderEdit = ({ id }) => {
     setData({ ...data, price: e.target.value });
   };
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    console.log(data);
-    setData(baseData);
-  };
-
+  // Ini nih yg penting
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    await updateBarang({
-      variables: {
-        id: data.id,
-        nama: baseData.nama,
-        qty: baseData.qty,
-        price: baseData.price,
-      },
-    });
+    if (!data.nama || !data.qty || !data.price) {
+      alert("Data tidak boleh kosong");
+    } else {
+      console.log(baseData);
+      e.preventDefault();
+      await updateBarang({
+        variables: {
+          id: baseData.id,
+          nama: data.nama,
+          qty: data.qty,
+          price: data.price,
+        },
+      });
+
+      dispatch(fetchBarang());
+      handleReset();
+    }
   };
 
   return (
@@ -78,7 +100,7 @@ const RenderEdit = ({ id }) => {
       </td>
       <td>
         <div className="flex justify-around">
-          <span className="text-green-500">
+          <span className="text-green-500" onClick={handleSubmit}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -95,7 +117,7 @@ const RenderEdit = ({ id }) => {
             </svg>
           </span>
 
-          <button type="reset" onClick={() => setData(baseData)}>
+          <button type="reset" onClick={handleReset}>
             <span className="text-red-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

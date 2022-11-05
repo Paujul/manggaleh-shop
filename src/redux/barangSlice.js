@@ -4,6 +4,7 @@ import hasura from "../api/hasura";
 
 const initialState = {
   items: [],
+  edit: [],
 };
 
 // Actions
@@ -24,7 +25,6 @@ export const barangSlice = createSlice({
 
   reducers: {
     getItem: (state, action) => {
-      //   console.log(action.payload);
       state.items = action.payload;
     },
 
@@ -32,13 +32,26 @@ export const barangSlice = createSlice({
 
     removeItem: (state, action) => {},
 
+    editItem: (state, action) => {
+      state.edit = action.payload;
+      console.log(state.edit);
+    },
+
     toggleEdit: (state, action) => {
-      state.items[action.payload].isEdit = !state.items[action.payload].isEdit;
-      console.log(action.payload);
+      // Set state.items isEdit to false except for the payload index
+      state.items.forEach((item, index) => {
+        if (index !== action.payload) {
+          item.isEdit = false;
+        }
+        state.items[action.payload].isEdit =
+          !state.items[action.payload].isEdit;
+      });
+      // console.log(action.payload);
     },
   },
 });
 
-export const { getItem, addItem, removeItem, toggleEdit } = barangSlice.actions;
+export const { getItem, addItem, removeItem, toggleEdit, editItem } =
+  barangSlice.actions;
 
 export default barangSlice.reducer;
