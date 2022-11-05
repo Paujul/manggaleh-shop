@@ -8,7 +8,7 @@ import { TableError, TableLoading } from "./TableLoading";
 import { editItem, getItem, toggleEdit } from "../../redux/barangSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const RenderUser = ({ item, index }) => {
+const ItemList = ({ item, index }) => {
   const items = useSelector((state) => state.items.items);
 
   const [deleteBarang] = useMutation(DELETE_BARANG, {
@@ -31,12 +31,14 @@ const RenderUser = ({ item, index }) => {
         nama: item.nama,
         qty: item.qty,
         price: item.price,
+        editId: data,
+        isEdit: true,
       })
     );
   };
 
   const edit = (id) => {
-    console.log(id);
+    // console.log(id);
     dispatch(toggleEdit(id));
     editData(id);
   };
@@ -110,4 +112,4 @@ const RenderUser = ({ item, index }) => {
   );
 };
 
-export default RenderUser;
+export default ItemList;

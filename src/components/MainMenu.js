@@ -1,5 +1,5 @@
 import Card from "./Card";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 
 import { useQuery, useSubscription } from "@apollo/client";
 import { GET_BARANG, SUB_BARANG } from "../apollo/Query";

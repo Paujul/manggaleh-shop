@@ -1,6 +1,6 @@
-import logo from "../assets/logocopet.png";
+import logo from "../../assets/logocopet.png";
 import { Link, useNavigate } from "react-router-dom";
-import Search from "./Search";
+import Search from "../Search";
 
 const Navbar = ({ toggleUpload }) => {
   const nav = useNavigate();
@@ -60,12 +60,12 @@ const Navbar = ({ toggleUpload }) => {
                 </i>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/cart"
                   className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 "
                 >
                   My Cart
-                </a>
+                </Link>
               </li>
               <li>
                 <Link

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-import Navbar from "../Navbar";
-import Footer from "../Footer";
-import RenderUser from "./RenderUser";
-import RenderEdit from "./RenderEdit";
+import Navbar from "../utils/Navbar";
+import Footer from "../utils/Footer";
+import ItemList from "./ItemList";
+import Edit from "./Edit";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBarang, getItem } from "../../redux/barangSlice";
@@ -43,7 +43,7 @@ const User = () => {
                 </thead>
                 <tbody>
                   {items.map((item, index) => (
-                    <RenderUser key={item.id} item={item} index={index} />
+                    <ItemList key={item.id} item={item} index={index} />
                   ))}
                   {/* <RenderUser isEdit={edit} toggleEdit={(e) => toggleEdit(e)} /> */}
                 </tbody>
@@ -72,7 +72,7 @@ const User = () => {
                 </tr>
               </thead>
               <tbody>
-                <RenderEdit />
+                <Edit />
               </tbody>
             </table>
           </div>

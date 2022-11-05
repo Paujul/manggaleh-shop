@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "../styles/Home.css";
 
-import Footer from "./Footer";
+import Footer from "./utils/Footer";
 import MainMenu from "./MainMenu";
-import Navbar from "./Navbar";
+import Navbar from "./utils/Navbar";
 import Upload from "./Upload";
 
 const Home = () => {

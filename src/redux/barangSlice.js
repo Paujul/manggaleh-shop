@@ -32,9 +32,14 @@ export const barangSlice = createSlice({
 
     removeItem: (state, action) => {},
 
+    editOriginalState: (state, action) => {
+      state.items.map((item) => {
+        item.isEdit = false;
+      });
+    },
+
     editItem: (state, action) => {
       state.edit = action.payload;
-      console.log(state.edit);
     },
 
     toggleEdit: (state, action) => {
@@ -51,7 +56,13 @@ export const barangSlice = createSlice({
   },
 });
 
-export const { getItem, addItem, removeItem, toggleEdit, editItem } =
-  barangSlice.actions;
+export const {
+  getItem,
+  addItem,
+  removeItem,
+  toggleEdit,
+  editItem,
+  editOriginalState,
+} = barangSlice.actions;
 
 export default barangSlice.reducer;

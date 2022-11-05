@@ -1,5 +1,5 @@
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "./utils/Navbar";
+import Footer from "./utils/Footer";
 import about from "../assets/about.png";
 import react from "../assets/react.png";
 import tailwind from "../assets/tailwind.png";

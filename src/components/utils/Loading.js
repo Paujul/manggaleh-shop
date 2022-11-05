@@ -1,4 +1,4 @@
-import "../styles/Loading.css";
+import "../../styles/Loading.css";
 
 const Loading = () => {
   <div className="flex justify-center mt-28">

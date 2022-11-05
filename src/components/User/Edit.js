@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UDPATE_BARANG, SUB_BARANG } from "../../apollo/Query";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBarang } from "../../redux/barangSlice";
+import {
+  editItem,
+  editOriginalState,
+  fetchBarang,
+} from "../../redux/barangSlice";
 
-const RenderEdit = () => {
+const Edit = () => {
   const editState = useSelector((state) => state.items.edit);
   const dispatch = useDispatch();
 
@@ -19,10 +23,11 @@ const RenderEdit = () => {
       price: "",
     };
     setData(emptyData);
-    console.log(data);
+    dispatch(editItem({ isEdit: false }));
+    dispatch(editOriginalState(false));
+    // console.log(data);
   };
 
-  const [toggleEdit, setToggleEdit] = useState(false);
   const baseData = {
     id: editState.id,
     nama: editState.nama,
@@ -75,7 +80,7 @@ const RenderEdit = () => {
           value={data.nama}
           className="p-3"
           onChange={handleNama}
-          disabled={toggleEdit ? "disabled" : ""}
+          disabled={editState.isEdit ? "" : "disabled"}
         />
       </th>
       <td>
@@ -85,7 +90,7 @@ const RenderEdit = () => {
           value={data.qty}
           className="p-3"
           onChange={handleQty}
-          disabled={toggleEdit ? "disabled" : ""}
+          disabled={editState.isEdit ? "" : "disabled"}
         />
       </td>
       <td>
@@ -95,7 +100,7 @@ const RenderEdit = () => {
           value={data.price}
           className="p-3"
           onChange={handlePrice}
-          disabled={toggleEdit ? "disabled" : ""}
+          disabled={editState.isEdit ? "" : "disabled"}
         />
       </td>
       <td>
@@ -141,4 +146,4 @@ const RenderEdit = () => {
   );
 };
 
-export default RenderEdit;
+export default Edit;
