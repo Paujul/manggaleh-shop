@@ -28,3 +28,15 @@ const MainMenu = () => {
 };
 
 export default MainMenu;
+
+// Hari ini kita pake subscription buat loading data doang,
+// Masukin datanya ke state.items
+// kl udh nnti pake state.items buat dirender ke MainMenu.
+
+// +Keranjang onClick = dispatch(addToCart())
+
+// addToCart = state.items.qty - 1 & state.cart = [...state.cart, { ...action.payload, qty: 1 }]
+// removeFromCart = state.cart[index].qty - 1 & state.items[action.payload.index].qty + state.cart[index].qty
+// buyItem = saldoCukup? = state.cart = []
+//         = hasura.put('/barang/{state.items[index].id}') = { qty: state.cart[index].qty }
+//          ^ Ini ntar loop dulu kl multiple items
