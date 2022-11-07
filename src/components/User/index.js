@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 
+import "../../styles/index.css";
 import Navbar from "../utils/Navbar";
 import Footer from "../utils/Footer";
 import ItemList from "./ItemList";
@@ -20,12 +21,12 @@ const User = () => {
     <>
       <Navbar />
       <div className="flex justify-center mt-28">
-        <div className="w-3/5 h-full bg-gray-100 flex flex-col flex-wrap items-center justify-around p-2">
+        <div className="mainPage">
           <div className="w-4/5 h-full">
-            <h1 className="p-5 font-extrabold text-green-700/70">Lapak Kamu</h1>
+            <h1 className="tableTextHeader">Lapak Kamu</h1>
             <div className="overflow-auto relative">
-              <table className="w-full text-sm text-left text-gray-500 ">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+              <table className="table">
+                <thead className="tableHeader">
                   <tr>
                     <th scope="col" className="py-3 px-6">
                       Nama Produk
@@ -51,9 +52,7 @@ const User = () => {
             </div>
           </div>
           <div className="">
-            <h1 className="p-5 font-extrabold text-green-700/70">
-              Edit Barang Kamu
-            </h1>
+            <h1 className="tableTextHeader">Edit Barang Kamu</h1>
             <table className="w-full text-sm text-left text-gray-500 ">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
@@ -78,7 +77,7 @@ const User = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer bottom={true} />
     </>
   );
 };

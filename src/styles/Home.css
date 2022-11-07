@@ -31,12 +31,22 @@
     overflow-ellipsis overflow-hidden whitespace-nowrap;
   }
 
-  .discount-percent {
+  .badge-available {
     @apply bg-green-400 px-1.5 py-0.5 rounded-md text-xs text-white;
+  }
+
+  .badge-empty {
+    @apply bg-red-400 px-1.5 py-0.5 rounded-md text-xs text-white;
   }
 
   .button-primary {
     @apply bg-green-500/80 hover:bg-green-500/90
+    px-3 py-2 m-3 rounded-md text-white font-medium
+    tracking-wider transition;
+  }
+
+  .button-empty {
+    @apply bg-red-500/80
     px-3 py-2 m-3 rounded-md text-white font-medium
     tracking-wider transition;
   }

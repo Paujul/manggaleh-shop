@@ -1,7 +1,18 @@
 import React from "react";
 import { NumericFormat } from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../redux/barangSlice";
 
-const Card = ({ barang }) => {
+const Card = ({ barang, index }) => {
+  const carts = useSelector((state) => state.items.cart);
+  const dispatch = useDispatch();
+
+  const add = () => {
+    console.log("State barang: ", barang);
+    dispatch(addToCart({ ...barang, index }));
+    console.log("Cart: ", carts);
+  };
+
   return (
     <>
       <div className="card m-5">
@@ -28,12 +39,23 @@ const Card = ({ barang }) => {
                 <span className="text-l font-bold">{value}</span>
               )}
             />
-            <span className="discount-percent"> Stok: {barang.qty} </span>
+            <span
+              className={barang.qty > 0 ? "badge-available" : "badge-empty"}
+            >
+              {" "}
+              Stok: {barang.qty}{" "}
+            </span>
           </div>
 
           {/* Action Button  */}
           <div className="mt-2 flex gap-3">
-            <button className="button-primary">+Keranjang</button>
+            <button
+              className={barang.qty > 0 ? "button-primary" : "button-empty"}
+              onClick={add}
+              disabled={barang.qty === 0 ? "disabled" : ""}
+            >
+              {barang.qty > 0 ? "+Keranjang" : "Barang Habis"}
+            </button>
             <button className="button-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { useQuery, useSubscription } from "@apollo/client";
+import { createSlice, current } from "@reduxjs/toolkit";
 import hasura from "../api/hasura";
 
 const initialState = {
   items: [],
   edit: [],
+  cart: [],
 };
 
 // Actions
@@ -13,7 +13,6 @@ export const fetchBarang = () => {
     const {
       data: { barang },
     } = await hasura.get("/barang");
-    console.log(barang);
     dispatch(getItem(barang));
   };
 };
@@ -24,13 +23,44 @@ export const barangSlice = createSlice({
   initialState,
 
   reducers: {
+    // --- Cart --- //
+    addToCart: (state, action) => {
+      const index = state.cart.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.cart[index].qty++;
+      } else {
+        state.cart = [...state.cart, { ...action.payload, qty: 1 }];
+      }
+    },
+
+    removeFromCart: (state, action) => {},
+
+    // action.payload nnti jd saldo
+    buyItem: (state, action) => {
+      // const idx = state.items.findIndex(
+      //   (item) => item.id === action.payload.id
+      // );
+
+      state.cart.map((item) => {
+        hasura.put(`/barang/${item.id}`, {
+          nama: item.nama,
+          price: item.price,
+          qty: state.items[item.index].qty - item.qty, // Besok kt cari index item buat diambil qtynya trs dikurangin item.qty
+        });
+      });
+
+      state.cart = [];
+    },
+    // --- Cart --- //
+
+    //
+
+    // --- Item --- //
     getItem: (state, action) => {
       state.items = action.payload;
     },
-
-    addItem: (state, action) => {},
-
-    removeItem: (state, action) => {},
 
     editOriginalState: (state, action) => {
       state.items.map((item) => {
@@ -53,13 +83,15 @@ export const barangSlice = createSlice({
       });
       // console.log(action.payload);
     },
+    // --- Item --- //
   },
 });
 
 export const {
+  addToCart,
+  removeFromCart,
+  buyItem,
   getItem,
-  addItem,
-  removeItem,
   toggleEdit,
   editItem,
   editOriginalState,

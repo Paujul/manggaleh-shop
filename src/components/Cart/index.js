@@ -1,21 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
+import CartItem from "./CartItem";
+import { NumericFormat } from "react-number-format";
 
+import "../../styles/index.css";
 import Navbar from "../utils/Navbar";
 import Footer from "../utils/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { buyItem, fetchBarang } from "../../redux/barangSlice";
 
 const Cart = () => {
+  const cart = useSelector((state) => state.items.cart);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBarang());
+  });
+
+  const buy = () => {
+    dispatch(buyItem());
+  };
+
   return (
     <div className="mt-28">
       <Navbar />
+
       <div className="flex justify-center mt-28">
-        <div className="w-3/5 h-full bg-gray-100 flex flex-col flex-wrap items-center justify-around p-2">
+        <div className="mainPage">
           <div className="w-4/5 h-full">
             <h1 className="p-5 font-extrabold text-green-700/70">
               Keranjang Kamu
             </h1>
             <div className="overflow-auto relative">
-              <table className="w-full text-sm text-left text-gray-500 ">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+              <table className="table">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="py-3 px-6">
                       Nama Produk
@@ -31,14 +48,47 @@ const Cart = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                  {cart.map(
+                    (item, index) => (
+                      console.log(item),
+                      (<CartItem key={item.id} item={item} index={index} />)
+                    )
+                  )}
+                </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
 
-      <Footer />
+      <div className="flex justify-center mt-12 h-16">
+        <div className="mainPage">
+          <div>
+            <button className="btn font-bold" onClick={buy}>
+              Bayar Sekarang
+            </button>
+          </div>
+          <div>
+            <h1>
+              Total Harga:
+              <span className="text-green-600">
+                <NumericFormat
+                  value={cart.reduce((total, item) => {
+                    return total + item.price * item.qty;
+                  }, 0)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"Rp"}
+                  renderText={(value) => <span> {value}</span>}
+                />
+              </span>
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <Footer bottom={true} />
     </div>
   );
 };

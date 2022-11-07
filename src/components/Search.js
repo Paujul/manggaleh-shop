@@ -1,3 +1,5 @@
+import "../styles/index.css";
+
 const Search = () => {
   return (
     <form className="w-96 focus:bg-green-500/50">
@@ -32,10 +34,7 @@ const Search = () => {
           placeholder="Sendok sup abad 17..."
           autoComplete="off"
         />
-        <button
-          type="submit"
-          className="text-white absolute right-2.5 bottom-2.5 bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 "
-        >
+        <button type="submit" className="btn absolute bg-green-700">
           Search
         </button>
       </div>
