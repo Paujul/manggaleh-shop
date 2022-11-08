@@ -5,15 +5,18 @@ import "../styles/index.css";
 import { useQuery, useSubscription } from "@apollo/client";
 import { GET_BARANG, SUB_BARANG } from "../apollo/Query";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchBarang, getItem } from "../redux/barangSlice";
+import { Suspense, useEffect } from "react";
 
 const MainMenu = () => {
-  const { data, loading, error } = useSubscription(SUB_BARANG);
+  // const { data, loading, error } = useSubscription(SUB_BARANG);
+  const barang = useSelector((state) => state.items.items);
 
   const renderCard = () => {
-    if (loading) return <Loading />;
-    if (error) return <p>Something went wrong</p>;
+    // if (loading) return <Loading />;
+    // if (error) return <p>Eror bang</p>;
 
-    return data.barang.map((barang, index) => {
+    return barang.map((barang, index) => {
       return <Card key={barang.id} barang={barang} index={index} />;
     });
   };
@@ -21,7 +24,7 @@ const MainMenu = () => {
   return (
     <div className="flex justify-center mt-28">
       <div className="h-full bg-gray-100 flex flex-row flex-wrap items-center justify-around p-2 w-3/5 rounded-lg">
-        {renderCard()}
+        <Suspense fallback={<Loading />}>{renderCard()}</Suspense>
       </div>
     </div>
   );

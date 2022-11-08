@@ -5,6 +5,7 @@ const initialState = {
   items: [],
   edit: [],
   cart: [],
+  balance: 0,
 };
 
 // Actions
@@ -29,8 +30,10 @@ export const barangSlice = createSlice({
         (item) => item.id === action.payload.id
       );
       if (index !== -1) {
+        state.items[action.payload.index].qty -= 1;
         state.cart[index].qty++;
       } else {
+        state.items[action.payload.index].qty--;
         state.cart = [...state.cart, { ...action.payload, qty: 1 }];
       }
     },
@@ -39,19 +42,19 @@ export const barangSlice = createSlice({
 
     // action.payload nnti jd saldo
     buyItem: (state, action) => {
-      // const idx = state.items.findIndex(
-      //   (item) => item.id === action.payload.id
-      // );
-
       state.cart.map((item) => {
         hasura.put(`/barang/${item.id}`, {
           nama: item.nama,
           price: item.price,
-          qty: state.items[item.index].qty - item.qty, // Besok kt cari index item buat diambil qtynya trs dikurangin item.qty
+          qty: state.items[item.index].qty, // Besok kt cari index item buat diambil qtynya trs dikurangin item.qty
         });
       });
 
       state.cart = [];
+    },
+
+    setBalance: (state, action) => {
+      state.balance = action.payload;
     },
     // --- Cart --- //
 
@@ -76,10 +79,10 @@ export const barangSlice = createSlice({
       // Set state.items isEdit to false except for the payload index
       state.items.forEach((item, index) => {
         if (index !== action.payload) {
-          item.isEdit = false;
+          return (item.isEdit = false);
         }
-        state.items[action.payload].isEdit =
-          !state.items[action.payload].isEdit;
+        return (state.items[action.payload].isEdit =
+          !state.items[action.payload].isEdit);
       });
       // console.log(action.payload);
     },
@@ -90,6 +93,7 @@ export const barangSlice = createSlice({
 export const {
   addToCart,
   removeFromCart,
+  setBalance,
   buyItem,
   getItem,
   toggleEdit,

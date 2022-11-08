@@ -6,18 +6,22 @@ import "../../styles/index.css";
 import Navbar from "../utils/Navbar";
 import Footer from "../utils/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { buyItem, fetchBarang } from "../../redux/barangSlice";
+import { buyItem, fetchBarang, setBalance } from "../../redux/barangSlice";
 
 const Cart = () => {
   const cart = useSelector((state) => state.items.cart);
+  const balance = useSelector((state) => state.items.balance);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchBarang());
-  });
+  const total = cart.reduce((total, item) => {
+    return total + item.price * item.qty;
+  }, 0);
 
   const buy = () => {
-    dispatch(buyItem());
+    if (balance >= total) {
+      dispatch(buyItem());
+      dispatch(setBalance(balance - total));
+    } else return alert("Saldo tidak cukup");
   };
 
   return (
@@ -74,9 +78,7 @@ const Cart = () => {
               Total Harga:
               <span className="text-green-600">
                 <NumericFormat
-                  value={cart.reduce((total, item) => {
-                    return total + item.price * item.qty;
-                  }, 0)}
+                  value={total}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={"Rp"}

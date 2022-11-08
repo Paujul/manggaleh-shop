@@ -1,5 +1,8 @@
 // import "../styles/App.css";
+import { useEffect } from "react";
 import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchBarang } from "../redux/barangSlice";
 
 import Home from "./Home";
 import Footer from "./utils/Footer";
@@ -11,6 +14,12 @@ import About from "./About";
 import Cart from "./Cart";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBarang());
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

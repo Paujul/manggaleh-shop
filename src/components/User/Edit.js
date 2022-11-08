@@ -78,7 +78,7 @@ const Edit = () => {
           type="text"
           placeholder="Icikiwir ..."
           value={data.nama}
-          className="p-3"
+          className={`p-3 rounded-lg ${editState.isEdit ? "bg-gray-200" : ""}`}
           onChange={handleNama}
           disabled={editState.isEdit ? "" : "disabled"}
         />
@@ -88,7 +88,7 @@ const Edit = () => {
           type="text"
           placeholder="420"
           value={data.qty}
-          className="p-3"
+          className={`p-3 rounded-lg ${editState.isEdit ? "bg-gray-200" : ""}`}
           onChange={handleQty}
           disabled={editState.isEdit ? "" : "disabled"}
         />
@@ -98,7 +98,7 @@ const Edit = () => {
           type="text"
           placeholder="69000"
           value={data.price}
-          className="p-3"
+          className={`p-3 rounded-lg ${editState.isEdit ? "bg-gray-200" : ""}`}
           onChange={handlePrice}
           disabled={editState.isEdit ? "" : "disabled"}
         />

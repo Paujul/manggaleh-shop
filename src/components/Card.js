@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NumericFormat } from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/barangSlice";
@@ -10,8 +10,11 @@ const Card = ({ barang, index }) => {
   const add = () => {
     console.log("State barang: ", barang);
     dispatch(addToCart({ ...barang, index }));
-    console.log("Cart: ", carts);
   };
+
+  useEffect(() => {
+    console.log("Cart: ", carts);
+  }, []);
 
   return (
     <>

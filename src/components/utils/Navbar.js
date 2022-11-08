@@ -1,14 +1,19 @@
-import logo from "../../assets/logocopet.png";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Search from "../Search";
+import { NumericFormat } from "react-number-format";
+
+import logo from "../../assets/logocopet.png";
 
 const Navbar = ({ toggleUpload }) => {
+  const balance = useSelector((state) => state.items.balance);
+
   const nav = useNavigate();
 
   return (
     <div className="">
       <nav className="fixed bg-gray-100 border-gray-200 px-2 sm:px-4 py-2.5 rounded w-full z-10 top-0 drop-shadow-md">
-        <div className="container flex flex-grow flex-wrap justify-around items-center mx-auto">
+        <div className="container flex flex-grow flex-wrap justify-between items-center mx-auto">
           <Link to="/" className="flex items-center">
             <img src={logo} className="mr-3 h-6 sm:h-9" alt="Manggaleh Shop" />
             <span className="self-center text-xl font-semibold whitespace-nowrap text-green-700/70">
@@ -45,7 +50,7 @@ const Navbar = ({ toggleUpload }) => {
               <li>
                 <i
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-white bg-green-700 rounded md:bg-transparent md:text-green-700 md:p-0 cursor-pointer"
+                  className="navLink text-green-700 hover:cursor-pointer hover:bg-green-700/50"
                   aria-current="page"
                   onClick={() => toggleUpload(true)}
                 >
@@ -60,30 +65,34 @@ const Navbar = ({ toggleUpload }) => {
                 </i>
               </li>
               <li>
-                <Link
-                  to="/cart"
-                  className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 "
-                >
+                <Link to="/cart" className="navLink">
                   My Cart
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/user"
-                  className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 "
-                >
+                <Link to="/user" className="navLink">
                   User
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/about"
-                  className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 "
-                >
+                <Link to="/about" className="navLink">
                   About
                 </Link>
               </li>
             </ul>
+          </div>
+          <div>
+            <NumericFormat
+              value={balance}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"Rp "}
+              renderText={(value) => (
+                <span className="button-primary hover:cursor-default">
+                  {value}
+                </span>
+              )}
+            />
           </div>
         </div>
       </nav>
