@@ -1,8 +1,26 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setSearchField } from "../redux/barangSlice";
 import "../styles/index.css";
 
 const Search = () => {
+  const search = useSelector((state) => state.items.searchField);
+  const dispatch = useDispatch();
+
+  const nav = useNavigate();
+
+  const submit = (e) => {
+    e.preventDefault();
+    nav("/");
+  };
+
+  const searchField = (e) => {
+    dispatch(setSearchField(e.target.value.toLocaleLowerCase()));
+  };
+
   return (
-    <form className="w-96 focus:bg-green-500/50">
+    <form className="w-96 focus:bg-green-500/50" onSubmit={submit}>
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only focus:bg-green-500/50"
@@ -33,6 +51,7 @@ const Search = () => {
           className="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-100 rounded-br-lg rounded-bl-lg  focus:ring-green-500 focus:border-green-500 "
           placeholder="Sendok sup abad 17..."
           autoComplete="off"
+          onChange={searchField}
         />
         <button type="submit" className="btn absolute bg-green-700">
           Search

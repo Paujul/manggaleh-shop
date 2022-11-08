@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_BARANG, DELETE_BARANG } from "../../apollo/Query";
 import { NumericFormat } from "react-number-format";
-import { TableError, TableLoading } from "./TableLoading";
 
-import { editItem, getItem, toggleEdit } from "../../redux/barangSlice";
+import { editItem, fetchBarang, toggleEdit } from "../../redux/barangSlice";
 import { useDispatch, useSelector } from "react-redux";
+import hasura from "../../api/hasura";
 
 const ItemList = ({ item, index }) => {
   const items = useSelector((state) => state.items.items);
-
-  const [deleteBarang] = useMutation(DELETE_BARANG, {
-    refetchQueries: [{ query: GET_BARANG }],
-  });
-  const remove = (id) => {
-    deleteBarang({ variables: { id } });
-  };
-
   const dispatch = useDispatch();
 
+  const edit = (id) => {
+    dispatch(toggleEdit(id));
+    editData(id);
+  };
+  const remove = async (id) => {
+    await hasura
+      .delete(`/barang/${id}`, {
+        id,
+      })
+      .then(() => dispatch(fetchBarang()));
+  };
+
   const editData = (data) => {
-    // console.log(items[data].id);
     if (items[data].isEdit === true) {
-      console.log("awe");
+      dispatch(toggleEdit(data));
     }
     dispatch(
       editItem({
@@ -35,12 +35,6 @@ const ItemList = ({ item, index }) => {
         isEdit: true,
       })
     );
-  };
-
-  const edit = (id) => {
-    // console.log(id);
-    dispatch(toggleEdit(id));
-    editData(id);
   };
 
   return (

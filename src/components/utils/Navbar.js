@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Search from "../Search";
 import { NumericFormat } from "react-number-format";
 
@@ -7,8 +7,6 @@ import logo from "../../assets/logocopet.png";
 
 const Navbar = ({ toggleUpload }) => {
   const balance = useSelector((state) => state.items.balance);
-
-  const nav = useNavigate();
 
   return (
     <div className="">
@@ -50,7 +48,7 @@ const Navbar = ({ toggleUpload }) => {
               <li>
                 <i
                   href="#"
-                  className="navLink text-green-700 hover:cursor-pointer hover:bg-green-700/50"
+                  className="navLink text-green-600 hover:cursor-pointer hover:text-green-700 transition-all"
                   aria-current="page"
                   onClick={() => toggleUpload(true)}
                 >

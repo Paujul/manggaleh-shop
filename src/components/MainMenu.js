@@ -11,12 +11,19 @@ import { Suspense, useEffect } from "react";
 const MainMenu = () => {
   // const { data, loading, error } = useSubscription(SUB_BARANG);
   const barang = useSelector((state) => state.items.items);
+  const searchField = useSelector((state) => state.items.searchField);
 
   const renderCard = () => {
-    // if (loading) return <Loading />;
-    // if (error) return <p>Eror bang</p>;
-
     return barang.map((barang, index) => {
+      return <Card key={barang.id} barang={barang} index={index} />;
+    });
+  };
+
+  const renderSearch = () => {
+    const searchFilter = barang.filter((barang) => {
+      return barang.nama.toLowerCase().includes(searchField);
+    });
+    return searchFilter.map((barang, index) => {
       return <Card key={barang.id} barang={barang} index={index} />;
     });
   };
@@ -24,7 +31,7 @@ const MainMenu = () => {
   return (
     <div className="flex justify-center mt-28">
       <div className="h-full bg-gray-100 flex flex-row flex-wrap items-center justify-around p-2 w-3/5 rounded-lg">
-        <Suspense fallback={<Loading />}>{renderCard()}</Suspense>
+        <Suspense fallback={<Loading />}>{renderSearch()}</Suspense>
       </div>
     </div>
   );

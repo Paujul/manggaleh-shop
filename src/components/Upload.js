@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useMutation } from "@apollo/client";
 import { POST_BARANG, SUB_BARANG } from "../apollo/Query";
+import { useDispatch } from "react-redux";
+import { fetchBarang } from "../redux/barangSlice";
+import hasura from "../api/hasura";
 
 const Upload = () => {
+  const dispatch = useDispatch();
+
   const [imgFile, setImgFile] = useState([]);
   const handleFile = (file) => {
     console.log(file[0]);
@@ -38,16 +43,15 @@ const Upload = () => {
 
   // Ini ntar dispatch Redux
   const postBarang = async () =>
-    await addBarang(
+    await hasura.post(
+      "/barang",
       {
-        variables: {
-          nama: nama,
-          qty: qty,
-          price: price,
-          imgId: imgId,
-        },
+        nama,
+        qty,
+        imgId,
+        price,
       },
-      console.log(imgId)
+      dispatch(fetchBarang())
     );
 
   const submit = (e) => {

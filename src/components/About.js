@@ -3,7 +3,7 @@ import Footer from "./utils/Footer";
 import about from "../assets/about.png";
 import react from "../assets/react.png";
 import tailwind from "../assets/tailwind.png";
-import apollo from "../assets/apollo.png";
+import axios from "../assets/axios.png";
 import reactrouter from "../assets/reactrouter.png";
 import redux from "../assets/redux.png";
 import hasura from "../assets/hasura.png";
@@ -20,9 +20,7 @@ const About = () => {
         </div>
 
         <div className="mb-5">
-          <h3 className="italic">
-            Simple dummy e-commerce web built using React.
-          </h3>
+          <h3 className="italic">"Kamu dagang? Kamu berdagang-dagang??"</h3>
         </div>
         <div>
           <h1 className="text-center font-extrabold text-green-700/70">
@@ -41,8 +39,8 @@ const About = () => {
                 </a>
               </li>
               <li>
-                <a href="https://www.apollographql.com/" target="_blank">
-                  <img src={apollo} className="logo-icon" />
+                <a href="https://axios-http.com/" target="_blank">
+                  <img src={axios} className="logo-icon" />
                 </a>
               </li>
             </ul>

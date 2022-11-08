@@ -37,7 +37,7 @@ export default () => {
     <>
       <Navbar />
       <div className="flex justify-center mt-28">
-        <div className="mainPage">
+        <div className="mainPage shadow-none">
           <div className="w-4/5 h-full">
             <h1 className="tableTextHeader">Lapak Kamu</h1>
             <div className="overflow-auto relative">
@@ -105,7 +105,7 @@ export default () => {
           </form>
         </div>
       </div>
-      <Footer bottom={true} />
+      <Footer />
     </>
   );
 };

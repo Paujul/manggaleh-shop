@@ -5,6 +5,7 @@ const initialState = {
   items: [],
   edit: [],
   cart: [],
+  searchField: "",
   balance: 0,
 };
 
@@ -38,7 +39,20 @@ export const barangSlice = createSlice({
       }
     },
 
-    removeFromCart: (state, action) => {},
+    removeFromCart: (state, action) => {
+      const index = state.cart.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      console.log(index);
+      if (index !== -1) {
+        state.items[action.payload.index].qty += state.cart[index].qty;
+        state.cart = state.cart.filter((item) => item.id !== action.payload.id);
+      } else {
+        console.log("Item not in cart");
+      }
+
+      // state.cart.splice(index, 1);
+    },
 
     // action.payload nnti jd saldo
     buyItem: (state, action) => {
@@ -87,6 +101,11 @@ export const barangSlice = createSlice({
       // console.log(action.payload);
     },
     // --- Item --- //
+
+    // --- Search --- //
+    setSearchField: (state, action) => {
+      state.searchField = action.payload;
+    },
   },
 });
 
@@ -99,6 +118,7 @@ export const {
   toggleEdit,
   editItem,
   editOriginalState,
+  setSearchField,
 } = barangSlice.actions;
 
 export default barangSlice.reducer;

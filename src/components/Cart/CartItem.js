@@ -1,7 +1,12 @@
 import React from "react";
 import { NumericFormat } from "react-number-format";
+import { useDispatch } from "react-redux";
+import { removeFromCart } from "../../redux/barangSlice";
 
 const CartItem = ({ item }) => {
+  const dispatch = useDispatch();
+  console.log(item);
+
   return (
     <tr className="bg-white border-b">
       <th
@@ -20,7 +25,10 @@ const CartItem = ({ item }) => {
       />
       <td className="py-4 px-6">
         <div className="flex justify-around">
-          <span className="text-red-500">
+          <span
+            className="text-red-500"
+            onClick={() => dispatch(removeFromCart(item))}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
