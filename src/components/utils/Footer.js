@@ -55,7 +55,7 @@ const Footer = ({ bottom }) => {
           </li>
           <li>
             <a
-              href="https://github.com/Paujul"
+              href="https://github.com/Paujul/manggaleh-shop"
               target="_blank"
               rel="noreferrer"
             >
