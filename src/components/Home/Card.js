@@ -14,7 +14,7 @@ const Card = ({ barang, index }) => {
       <div className="card m-5">
         <img
           src={`${process.env.REACT_APP_CLOUDINARY_URL}${barang.imgId}`}
-          className="w-full h-64 object-contain"
+          className="w-full h-48 object-cover"
           alt={`${barang.nama}`}
         />
 
