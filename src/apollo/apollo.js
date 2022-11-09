@@ -8,8 +8,7 @@ import { createClient } from "graphql-ws";
 const httpLink = new HttpLink({
   uri: "https://manggaleh-shop.hasura.app/v1/graphql",
   headers: {
-    "x-hasura-admin-secret":
-      "bqQTJbdQJ5schYcWNg007QkfYqTTgtzy8SM9xAc2xRe6fZ5eWiXOZQ8gWF6N6STr",
+    "x-hasura-admin-secret": process.env.REACT_APP_API_KEY,
   },
 });
 
