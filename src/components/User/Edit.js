@@ -58,6 +58,7 @@ const Edit = () => {
       <th className="py-1 px-2 font-medium text-gray-900 whitespace-nowrap">
         <input
           type="text"
+          autocomplete="off"
           placeholder="Icikiwir ..."
           name="nama"
           value={data.nama}
@@ -69,6 +70,7 @@ const Edit = () => {
       <td>
         <input
           type="text"
+          autocomplete="off"
           placeholder="420"
           name="qty"
           value={data.qty}
@@ -80,6 +82,7 @@ const Edit = () => {
       <td>
         <input
           type="text"
+          autocomplete="off"
           placeholder="69000"
           name="price"
           value={data.price}
