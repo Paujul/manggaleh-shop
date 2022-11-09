@@ -1,24 +1,15 @@
-// import "../styles/App.css";
-import { useEffect } from "react";
-import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { fetchBarang } from "../redux/barangSlice";
 
-import Home from "./Home";
-import Footer from "./utils/Footer";
-import MainMenu from "./MainMenu";
-import Navbar from "./utils/Navbar";
-import Upload from "./Upload";
+import Home from "./Home/";
 import User from "./User";
 import About from "./About";
 import Cart from "./Cart";
+import NotFound from "./NotFound";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchBarang());
-  }, []);
+  useDispatch()(fetchBarang());
 
   return (
     <BrowserRouter>
@@ -27,6 +18,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/about" element={<About />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

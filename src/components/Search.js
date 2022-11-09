@@ -1,11 +1,9 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSearchField } from "../redux/barangSlice";
 import "../styles/index.css";
 
 const Search = () => {
-  const search = useSelector((state) => state.items.searchField);
   const dispatch = useDispatch();
 
   const nav = useNavigate();

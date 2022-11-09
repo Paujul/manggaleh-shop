@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import hasura from "../api/hasura";
 
 const initialState = {
@@ -43,26 +43,22 @@ export const barangSlice = createSlice({
       const index = state.cart.findIndex(
         (item) => item.id === action.payload.id
       );
-      console.log(index);
       if (index !== -1) {
         state.items[action.payload.index].qty += state.cart[index].qty;
         state.cart = state.cart.filter((item) => item.id !== action.payload.id);
       } else {
-        console.log("Item not in cart");
+        alert("Barang tidak ada di keranjang");
       }
-
-      // state.cart.splice(index, 1);
     },
 
-    // action.payload nnti jd saldo
     buyItem: (state, action) => {
-      state.cart.map((item) => {
+      state.cart.map((item) =>
         hasura.put(`/barang/${item.id}`, {
           nama: item.nama,
           price: item.price,
-          qty: state.items[item.index].qty, // Besok kt cari index item buat diambil qtynya trs dikurangin item.qty
-        });
-      });
+          qty: state.items[item.index].qty,
+        })
+      );
 
       state.cart = [];
     },
@@ -80,9 +76,7 @@ export const barangSlice = createSlice({
     },
 
     editOriginalState: (state, action) => {
-      state.items.map((item) => {
-        item.isEdit = false;
-      });
+      state.items.map((item) => (item.isEdit = false));
     },
 
     editItem: (state, action) => {
@@ -90,7 +84,6 @@ export const barangSlice = createSlice({
     },
 
     toggleEdit: (state, action) => {
-      // Set state.items isEdit to false except for the payload index
       state.items.forEach((item, index) => {
         if (index !== action.payload) {
           return (item.isEdit = false);
@@ -98,7 +91,6 @@ export const barangSlice = createSlice({
         return (state.items[action.payload].isEdit =
           !state.items[action.payload].isEdit);
       });
-      // console.log(action.payload);
     },
     // --- Item --- //
 

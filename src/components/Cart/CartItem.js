@@ -5,7 +5,6 @@ import { removeFromCart } from "../../redux/barangSlice";
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
-  console.log(item);
 
   return (
     <tr className="bg-white border-b">

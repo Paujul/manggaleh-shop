@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { NumericFormat } from "react-number-format";
 
 import { editItem, fetchBarang, toggleEdit } from "../../redux/barangSlice";

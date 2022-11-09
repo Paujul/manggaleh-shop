@@ -12,7 +12,7 @@ const Footer = ({ bottom }) => {
           <a href={logo} className="hover:underline">
             Manggaleh Shop™
           </a>
-          . All Rights Reserved.
+          . App Version 0.2.1
         </span>
         <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 sm:mt-0">
           <li className="flex">
@@ -54,8 +54,11 @@ const Footer = ({ bottom }) => {
             </svg>
           </li>
           <li>
-            <a href="https://github.com/Paujul" target="_blank">
-              {" "}
+            <a
+              href="https://github.com/Paujul"
+              target="_blank"
+              rel="noreferrer"
+            >
               <svg
                 className="w-5 h-5"
                 fill="currentColor"

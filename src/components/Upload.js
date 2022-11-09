@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useMutation } from "@apollo/client";
-import { POST_BARANG, SUB_BARANG } from "../apollo/Query";
 import { useDispatch } from "react-redux";
 import { fetchBarang } from "../redux/barangSlice";
 import hasura from "../api/hasura";
@@ -11,56 +9,57 @@ const Upload = () => {
 
   const [imgFile, setImgFile] = useState([]);
   const handleFile = (file) => {
-    console.log(file[0]);
     setImgFile(file[0]);
   };
 
-  const [addBarang] = useMutation(POST_BARANG, {
-    updateQueries: { query: SUB_BARANG },
+  const [input, setData] = useState({
+    nama: "",
+    qty: 0,
+    imgId: "",
+    price: 0,
   });
 
-  const [nama, setNama] = useState("");
-  const [qty, setQty] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [imgId, setImgId] = useState("");
-
-  const uploadFile = async () => {
-    const formData = new FormData();
-    formData.append("file", imgFile);
-    formData.append("upload_preset", "manggaleh");
-
-    await axios
-      .post("https://api.cloudinary.com/v1_1/dkha2cdtw/image/upload", formData)
-      .then(({ data: { public_id } }) => {
-        console.log(public_id);
-        setImgId(public_id);
+  const handleEdit = (e) => {
+    if (e.target.name === "qty" || e.target.name === "price") {
+      setData((data) => {
+        return { ...data, [e.target.name]: parseInt(e.target.value) };
       });
+    } else {
+      setData((data) => {
+        return { ...data, [e.target.name]: e.target.value };
+      });
+    }
   };
 
   useEffect(() => {
+    const uploadFile = async () => {
+      const formData = new FormData();
+      formData.append("file", imgFile);
+      formData.append("upload_preset", "manggaleh");
+
+      await axios
+        .post(
+          "https://api.cloudinary.com/v1_1/dkha2cdtw/image/upload",
+          formData
+        )
+        .then(({ data: { public_id } }) => {
+          setData((data) => {
+            return { ...data, imgId: public_id };
+          });
+        });
+    };
     uploadFile();
   }, [imgFile]);
 
-  // Ini ntar dispatch Redux
-  const postBarang = async () =>
-    await hasura.post(
-      "/barang",
-      {
-        nama,
-        qty,
-        imgId,
-        price,
-      },
-      dispatch(fetchBarang())
-    );
-
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    postBarang();
+    await hasura.post("/barang", input).then(() => {
+      dispatch(fetchBarang());
+    });
   };
 
   return (
-    <div className="top-72 left-96 right-96 bg-transparent absolute">
+    <div className="top-72 left-96 right-96 bg-transparent fixed">
       <div className="mx-5 text-xl flex justify-center items-center">
         <div className="backdrop-blur bg-transparent border-2 border-solid border-green-500/90 rounded-lg">
           <h1 className="mb-6 text-center bg-green-500/90 text-white">
@@ -72,10 +71,7 @@ const Upload = () => {
               onSubmit={submit}
             >
               <div className="mb-6 mx-3">
-                <label
-                  htmlFor="productId"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
+                <label className="block mb-2 text-sm font-medium text-gray-900 bg-gray-100/20 rounded-lg p-1">
                   Masukkan gambar produk
                 </label>
                 <input
@@ -94,10 +90,11 @@ const Upload = () => {
                   Masukkan nama produk
                 </label>
                 <input
-                  autoComplete="false"
+                  autocomplete="off"
                   autoCorrect="false"
                   type="text"
-                  onChange={(e) => setNama(e.target.value)}
+                  name="nama"
+                  onChange={handleEdit}
                   id="nama"
                   placeholder="Sendok sup abad 17"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
@@ -111,10 +108,15 @@ const Upload = () => {
                   Masukkan harga produk
                 </label>
                 <input
-                  autoComplete="false"
+                  autocomplete="off"
                   autoCorrect="false"
                   type="text"
-                  onChange={(e) => setPrice(e.target.value)}
+                  onInvalid={(e) => {
+                    e.target.setCustomValidity("Harga harus angka");
+                  }}
+                  pattern="[0-9]*"
+                  name="price"
+                  onChange={handleEdit}
                   id="price"
                   placeholder="Rp500000"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
@@ -130,10 +132,12 @@ const Upload = () => {
                     Jumlah produk
                   </label>
                   <input
-                    autoComplete="false"
+                    autocomplete="off"
                     autoCorrect="false"
-                    type="text"
-                    onChange={(e) => setQty(e.target.value)}
+                    type="number"
+                    pattern="[0-9]*"
+                    name="qty"
+                    onChange={handleEdit}
                     id="jumlah"
                     placeholder="9999"
                     className="h-10 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-28 p-2.5"

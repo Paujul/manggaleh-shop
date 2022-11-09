@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
-import { UDPATE_BARANG, SUB_BARANG } from "../../apollo/Query";
 import { useDispatch, useSelector } from "react-redux";
+import hasura from "../../api/hasura";
 import {
   editItem,
   editOriginalState,
@@ -12,10 +11,6 @@ const Edit = () => {
   const editState = useSelector((state) => state.items.edit);
   const dispatch = useDispatch();
 
-  const [updateBarang] = useMutation(UDPATE_BARANG, {
-    updateQueries: { query: SUB_BARANG },
-  });
-
   const handleReset = () => {
     const emptyData = {
       nama: "",
@@ -25,7 +20,6 @@ const Edit = () => {
     setData(emptyData);
     dispatch(editItem({ isEdit: false }));
     dispatch(editOriginalState(false));
-    // console.log(data);
   };
 
   const baseData = {
@@ -38,33 +32,21 @@ const Edit = () => {
 
   useEffect(() => {
     setData(baseData);
+    // eslint-disable-next-line
   }, [editState]);
 
-  const handleNama = (e) => {
-    setData({ ...data, nama: e.target.value });
-  };
-  const handleQty = (e) => {
-    setData({ ...data, qty: e.target.value });
-  };
-  const handlePrice = (e) => {
-    setData({ ...data, price: e.target.value });
+  const handleEdit = (e) => {
+    setData((data) => {
+      return { ...data, [e.target.name]: e.target.value };
+    });
   };
 
-  // Ini nih yg penting
   const handleSubmit = async (e) => {
     if (!data.nama || !data.qty || !data.price) {
       alert("Data tidak boleh kosong");
     } else {
-      console.log(baseData);
       e.preventDefault();
-      await updateBarang({
-        variables: {
-          id: baseData.id,
-          nama: data.nama,
-          qty: data.qty,
-          price: data.price,
-        },
-      });
+      await hasura.put(`/barang/${data.id}`, data);
 
       dispatch(fetchBarang());
       handleReset();
@@ -77,9 +59,10 @@ const Edit = () => {
         <input
           type="text"
           placeholder="Icikiwir ..."
+          name="nama"
           value={data.nama}
           className={`p-3 rounded-lg ${editState.isEdit ? "bg-gray-100" : ""}`}
-          onChange={handleNama}
+          onChange={handleEdit}
           disabled={editState.isEdit ? "" : "disabled"}
         />
       </th>
@@ -87,9 +70,10 @@ const Edit = () => {
         <input
           type="text"
           placeholder="420"
+          name="qty"
           value={data.qty}
           className={`p-3 rounded-lg ${editState.isEdit ? "bg-gray-100" : ""}`}
-          onChange={handleQty}
+          onChange={handleEdit}
           disabled={editState.isEdit ? "" : "disabled"}
         />
       </td>
@@ -97,9 +81,10 @@ const Edit = () => {
         <input
           type="text"
           placeholder="69000"
+          name="price"
           value={data.price}
           className={`p-3 rounded-lg ${editState.isEdit ? "bg-gray-100" : ""}`}
-          onChange={handlePrice}
+          onChange={handleEdit}
           disabled={editState.isEdit ? "" : "disabled"}
         />
       </td>

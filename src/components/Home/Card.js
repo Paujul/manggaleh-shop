@@ -1,27 +1,21 @@
-import React, { useEffect } from "react";
 import { NumericFormat } from "react-number-format";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../redux/barangSlice";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/barangSlice";
 
 const Card = ({ barang, index }) => {
-  const carts = useSelector((state) => state.items.cart);
   const dispatch = useDispatch();
 
   const add = () => {
-    console.log("State barang: ", barang);
     dispatch(addToCart({ ...barang, index }));
   };
-
-  useEffect(() => {
-    console.log("Cart: ", carts);
-  }, []);
 
   return (
     <>
       <div className="card m-5">
         <img
-          src={`https://res.cloudinary.com/dkha2cdtw/image/upload/${barang.imgId}`}
+          src={`${process.env.REACT_APP_CLOUDINARY_URL}${barang.imgId}`}
           className="w-full h-64 object-contain"
+          alt={`${barang.nama}`}
         />
 
         <h2
@@ -45,12 +39,10 @@ const Card = ({ barang, index }) => {
             <span
               className={barang.qty > 0 ? "badge-available" : "badge-empty"}
             >
-              {" "}
-              Stok: {barang.qty}{" "}
+              Stok: {barang.qty}
             </span>
           </div>
 
-          {/* Action Button  */}
           <div className="mt-2 flex gap-3">
             <button
               className={barang.qty > 0 ? "button-primary" : "button-empty"}

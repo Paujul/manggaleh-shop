@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
 import CartItem from "./CartItem";
 import { NumericFormat } from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
+import { buyItem, setBalance } from "../../redux/barangSlice";
 
 import "../../styles/index.css";
 import Navbar from "../utils/Navbar";
 import Footer from "../utils/Footer";
-import { useDispatch, useSelector } from "react-redux";
-import { buyItem, fetchBarang, setBalance } from "../../redux/barangSlice";
 
 const Cart = () => {
   const cart = useSelector((state) => state.items.cart);
@@ -53,12 +52,9 @@ const Cart = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.map(
-                    (item, index) => (
-                      console.log(item),
-                      (<CartItem key={item.id} item={item} index={index} />)
-                    )
-                  )}
+                  {cart.map((item, index) => (
+                    <CartItem key={item.id} item={item} index={index} />
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+/* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 
 import "../../styles/index.css";
 import Navbar from "../utils/Navbar";
@@ -7,7 +8,7 @@ import ItemList from "./ItemList";
 import Edit from "./Edit";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBarang, getItem, setBalance } from "../../redux/barangSlice";
+import { setBalance } from "../../redux/barangSlice";
 
 export default () => {
   const items = useSelector((state) => state.items.items);
@@ -17,11 +18,9 @@ export default () => {
   const regex = /^[0-9\b]+$/;
 
   const handleChange = (e) => {
-    // if value is not equal to regex, then don't update the value
     if (e.target.value === "" || regex.test(e.target.value)) {
       setBal(e.target.value);
     } else {
-      // prevent the user from typing anything other than numbers
       e.target.value = "";
       alert("Saldo harus berupa angka");
     }
