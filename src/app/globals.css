@@ -1,18 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap');
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
@@ -23,5 +21,75 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Readex Pro', serif;
+    /* font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #000;
+        background-color: #fff; */
+  }
+}
+
+@layer components {
+  .btn {
+    @apply bottom-2.5 right-2.5 rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300;
+  }
+  .navLink {
+    @apply block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-green-700;
+  }
+  .mainPage {
+    @apply flex h-full w-3/5 flex-col flex-wrap items-center justify-around rounded-lg bg-gray-100 p-2 shadow-md;
+  }
+  .table {
+    @apply w-full text-left text-sm text-gray-500;
+  }
+  .tableHeader {
+    @apply bg-gray-50 text-xs uppercase text-gray-700;
+  }
+  .tableTextHeader {
+    @apply p-5 font-extrabold text-green-700/70;
+  }
+  .card {
+    @apply min-h-[10rem] w-60 overflow-hidden rounded-md bg-white text-gray-700 shadow-lg;
+  }
+
+  .badge {
+    @apply rounded-full bg-gray-100 px-3 py-1 text-xs;
+  }
+
+  .product-title {
+    @apply overflow-hidden overflow-ellipsis whitespace-nowrap text-lg font-semibold;
+  }
+
+  .badge-available {
+    @apply rounded-md bg-green-400 px-1.5 py-0.5 text-xs text-white;
+  }
+
+  .badge-empty {
+    @apply rounded-md bg-red-400 px-1.5 py-0.5 text-xs text-white;
+  }
+
+  .button-primary {
+    @apply m-3 rounded-md bg-green-500/80 px-3 py-2 font-medium tracking-wider text-white transition hover:bg-green-500/90;
+  }
+
+  .button-empty {
+    @apply m-3 rounded-md bg-red-500/80 px-3 py-2 font-medium tracking-wider text-white transition;
+  }
+
+  .button-icon {
+    @apply m-3 flex flex-grow items-center justify-center rounded-md bg-gray-300/60 transition hover:bg-gray-300/80;
+  }
+  .logo-icon {
+    @apply h-36 w-36 object-contain p-5;
   }
 }
