@@ -5,7 +5,7 @@ import { parseRequestBody } from '@/utils/parseRequestBody'
 
 // Adjust path as needed
 
-type ProductCreateInput = {
+export type ProductCreateInput = {
   name: string
   price: number
   qty: number
@@ -47,73 +47,6 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     console.error('Error creating product:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    )
-  }
-}
-
-// PUT /api/products/:id - Update a product by ID
-export async function PUT(request: Request) {
-  try {
-    const url = new URL(request.url)
-    const id = url.pathname.split('/').pop()
-
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'Missing product ID' },
-        { status: 400 }
-      )
-    }
-
-    const body = await parseRequestBody(request)
-    const { name, price, qty, imgId } = body as ProductCreateInput
-
-    const updatedProduct = await prisma.product.update({
-      where: { id: Number(id) },
-      data: { name, price, qty, imgId },
-    })
-
-    return NextResponse.json(
-      { success: true, product: updatedProduct },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error updating product:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    )
-  }
-}
-
-// DELETE /api/products/:id - Delete a product by ID
-export async function DELETE(request: Request) {
-  try {
-    const url = new URL(request.url)
-    const id = url.pathname.split('/').pop()
-
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'Missing product ID' },
-        { status: 400 }
-      )
-    }
-
-    await prisma.product.delete({
-      where: { id: Number(id) },
-    })
-
-    return NextResponse.json({ success: true }, { status: 204 })
-  } catch (error) {
-    console.error('Error deleting product:', error)
     return NextResponse.json(
       {
         success: false,
