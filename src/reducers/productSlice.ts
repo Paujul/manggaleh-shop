@@ -6,7 +6,7 @@ export interface Product {
   name: string
   price: number
   qty: number
-  imgId: string
+  imgId?: string
 }
 
 // Define the initial state type

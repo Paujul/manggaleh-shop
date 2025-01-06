@@ -1,19 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-export type BalanceType = {
+export type BalanceReducerState = {
   balance: number
 }
 
 const initialState: number = 0
 
 export const balanceSlice = createSlice({
-  name: 'product',
+  name: 'balance',
   initialState,
   reducers: {
-    // Fetch products and set the state
-    setBalance: (state, action: PayloadAction<number>) => {
-      state = action.payload
-    },
+    setBalance: (state, action: PayloadAction<number>) => action.payload,
   },
 })
 

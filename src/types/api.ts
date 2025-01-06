@@ -13,7 +13,7 @@ export interface Catalog {
   name: string
   price: number
   qty: number
-  imgId: string
+  imgId?: string
 }
 
 // Type for the API response
