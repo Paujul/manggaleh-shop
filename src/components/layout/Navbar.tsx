@@ -8,19 +8,19 @@ import { NumericFormat } from 'react-number-format'
 import { useSelector } from 'react-redux'
 
 import navbarLogo from '@/assets/navbar-logo.png'
-import { BalanceType } from '@/reducers/balanceSlice'
+import { BalanceReducerState } from '@/reducers/balanceSlice'
 
 import Search from './Search'
 
 type NavbarProps = {
-  toggleUpload: (value: boolean) => void
+  toggleUpload?: (value: boolean | undefined) => void
 }
 
 const Navbar: FC<NavbarProps> = ({ toggleUpload }) => {
-  const balance = useSelector((state: BalanceType) => state.balance)
+  const balance = useSelector((state: BalanceReducerState) => state.balance)
 
   return (
-    <nav className='fixed top-0 z-10 w-full rounded border-gray-200 bg-gray-100 px-2 py-2.5 drop-shadow-md sm:px-4'>
+    <nav className='sticky top-0 z-10 w-full rounded border-gray-200 bg-gray-100 px-2 py-2.5 drop-shadow-md sm:px-4'>
       <div className='container mx-auto flex flex-grow flex-wrap items-center justify-between'>
         <Link href='/' className='flex items-center'>
           <Image
@@ -65,7 +65,7 @@ const Navbar: FC<NavbarProps> = ({ toggleUpload }) => {
                 href='#'
                 className='navLink text-green-600 transition-all hover:cursor-pointer hover:text-green-700'
                 aria-current='page'
-                onClick={() => toggleUpload(true)}
+                onClick={() => toggleUpload && toggleUpload(true)}
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -83,8 +83,8 @@ const Navbar: FC<NavbarProps> = ({ toggleUpload }) => {
               </Link>
             </li>
             <li>
-              <Link href='/user' className='navLink'>
-                User
+              <Link href='/dashboard' className='navLink'>
+                Dashboard
               </Link>
             </li>
             <li>
@@ -97,7 +97,6 @@ const Navbar: FC<NavbarProps> = ({ toggleUpload }) => {
         <div>
           <NumericFormat
             value={balance}
-            // value={100000}
             displayType={'text'}
             thousandSeparator={true}
             prefix={'Rp '}

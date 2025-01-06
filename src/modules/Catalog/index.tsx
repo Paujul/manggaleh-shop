@@ -22,12 +22,13 @@ const Catalogs: FC = () => {
         console.error('Failed to fetch products:', error)
       }
     }
-
-    fetchProducts()
-  }, [dispatch])
-  // console.log(productData.products)
+    if (productData.length === 0) {
+      fetchProducts()
+      console.log('fetching products')
+    }
+  }, [dispatch, productData.length])
   return (
-    <div className='mt-[78px]'>
+    <div className='mt-5'>
       <div className='container mx-auto flex w-3/5 flex-row flex-wrap items-center justify-around rounded-lg bg-gray-100 p-2'>
         {productData &&
           productData?.map((product: Catalog, index: number) => (

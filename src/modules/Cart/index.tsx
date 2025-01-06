@@ -2,8 +2,7 @@ import type { FC } from 'react'
 import { NumericFormat } from 'react-number-format'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Footer from '@/components/layout/Footer'
-import { BalanceType } from '@/reducers/balanceSlice'
+import { BalanceReducerState } from '@/reducers/balanceSlice'
 import { buyItem } from '@/reducers/cartSlice'
 import { Catalog } from '@/types/api'
 
@@ -17,7 +16,7 @@ type CartType = {
 
 const Cart: FC = () => {
   const cart = useSelector((state: CartType) => state.cart.cart)
-  const balance = useSelector((state: BalanceType) => state.balance)
+  const balance = useSelector((state: BalanceReducerState) => state.balance)
   const dispatch = useDispatch()
 
   const total = cart.reduce((total, item) => {
@@ -33,8 +32,8 @@ const Cart: FC = () => {
 
   console.log(cart)
   return (
-    <div className='mt-28'>
-      <div className='mt-28 flex justify-center'>
+    <>
+      <div className='mt-5 flex justify-center'>
         <div className='mainPage'>
           <div className='h-full w-4/5'>
             <h1 className='p-5 font-extrabold text-green-700/70'>
@@ -92,9 +91,7 @@ const Cart: FC = () => {
           </div>
         </div>
       </div>
-
-      <Footer bottom={true} />
-    </div>
+    </>
   )
 }
 

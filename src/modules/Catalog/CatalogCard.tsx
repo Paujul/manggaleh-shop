@@ -29,7 +29,7 @@ const CatalogCard: FC<CatalogCardProps> = ({ product }) => {
     setQty(product.qty)
   }, [product])
 
-  console.log(product)
+  // console.log(product)
   return (
     <div className='card m-5'>
       {/* <Image
