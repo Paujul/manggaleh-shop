@@ -1,46 +1,49 @@
-import { FC, useEffect, useState } from 'react'
-// import Image from 'next/image'
+import { CldImage } from 'next-cloudinary'
+import { useState } from 'react'
+import type { FC } from 'react'
 import { NumericFormat } from 'react-number-format'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { addToCart } from '@/reducers/cartSlice'
-import { RootState } from '@/store'
 import { Catalog } from '@/types/api'
 
-// Define the prop types
 interface CatalogCardProps {
   product: Catalog
-  index: number
 }
 
 const CatalogCard: FC<CatalogCardProps> = ({ product }) => {
-  const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
+  const [imageSrc, setImageSrc] = useState(
+    product.imgId || '/assets/image-unavailable-icon.avif'
+  ) // Ensure the fallback path
 
-  const cartSlice = useSelector((state: RootState) => state.cart)
-  // const productSlice = useSelector((state: RootState) => state.products)
-  const [qty, setQty] = useState<number>(product.qty)
-  const handleCart = (product: Catalog) => {
-    dispatch(addToCart(product))
-    setQty(qty - 1)
-    console.log(cartSlice)
+  const handleImageError = () => {
+    console.error(
+      `Can't load image for product: ${product.name}, using fallback image`
+    )
+    setImageSrc(
+      'https://res.cloudinary.com/dkha2cdtw/image/upload/v1736312610/Manggaleh/image-unavailable-icon.avif'
+    ) // Dynamically set the fallback
   }
 
-  useEffect(() => {
-    setQty(product.qty)
-  }, [product])
-
-  // console.log(product)
   return (
     <div className='card m-5'>
-      {/* <Image
-        // src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}${product.imgId}`}
-        src={'asd'}
-        className='h-48 w-full object-cover'
-        width={200}
-        height={192}
-        alt={product.nama}
-      /> */}
-      <div className='h-48 w-full bg-black object-cover' />
+      <div className='relative h-48 w-full'>
+        {isLoading && (
+          <div className='absolute left-0 top-0 h-48 w-full animate-pulse bg-gray-200'></div>
+        )}
+        <CldImage
+          src={imageSrc}
+          className='h-48 w-full object-cover'
+          width={256}
+          height={245}
+          crop='fill'
+          alt={product.name}
+          loading='lazy'
+          placeholder='blur'
+          blurDataURL='image-unavailable-icon.avif'
+          onLoad={() => setIsLoading(false)}
+          onError={handleImageError} // Dynamically switch to fallback
+        />
+      </div>
 
       <h2 className='product-title mx-10 my-2 text-center' title={product.name}>
         {product.name}
@@ -50,25 +53,24 @@ const CatalogCard: FC<CatalogCardProps> = ({ product }) => {
         <div className='mt-1 flex items-center justify-center gap-2'>
           <NumericFormat
             value={product.price}
-            displayType={'text'}
+            displayType='text'
             thousandSeparator={true}
-            prefix={'Rp '}
+            prefix='Rp '
             renderText={(value) => (
               <span className='text-l font-bold'>{value}</span>
             )}
           />
-          <span className={qty > 0 ? 'badge-available' : 'badge-empty'}>
-            Stok: {qty}
+          <span className={product.qty > 0 ? 'badge-available' : 'badge-empty'}>
+            Stok: {product.qty}
           </span>
         </div>
 
         <div className='mt-2 flex gap-3'>
           <button
-            className={qty > 0 ? 'button-primary' : 'button-empty'}
-            onClick={handleCart.bind(null, product)}
-            disabled={qty === 0}
+            className={product.qty > 0 ? 'button-primary' : 'button-empty'}
+            disabled={product.qty === 0}
           >
-            {qty > 0 ? '+Keranjang' : 'Barang Habis'}
+            {product.qty > 0 ? '+Keranjang' : 'Barang Habis'}
           </button>
           <button className='button-icon'>
             <svg
