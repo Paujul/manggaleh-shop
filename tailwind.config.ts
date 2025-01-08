@@ -16,6 +16,12 @@ const config: Config = {
       },
     },
   },
+  variants: {
+    extend: {
+      ringWidth: ['focus'],
+      ringColor: ['focus'],
+    },
+  },
   plugins: [],
 }
 export default config
