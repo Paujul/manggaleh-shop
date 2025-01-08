@@ -31,18 +31,29 @@ const EditField: FC<AppProps> = ({ editData }) => {
       alert('Data tidak boleh kosong')
       return
     }
-    // const { id, ...restData } = data
-    await client.put(`/products/${data.id}`, {
-      name: data.name,
-      qty: Number(data.qty) as number,
-      price: Number(data.price) as number,
-      imgId: data.imgId,
-    })
 
-    await client.get('/products').then((res) => {
-      console.log(data)
-      dispatch(setProducts(res.data.products))
-    })
+    try {
+      await Promise.all([
+        client
+          .put(`/products/${data.id}`, {
+            name: data.name,
+            qty: Number(data.qty) as number,
+            price: Number(data.price) as number,
+            imgId: data.imgId,
+          })
+          .then(async () => {
+            // Trigger GET only after PUT completes
+            return client.get('/products').then((res) => {
+              console.log(res.data)
+              dispatch(setProducts(res.data.products))
+            })
+          }),
+      ])
+
+      handleReset()
+    } catch (error) {
+      console.error('Error in handleSubmit:', error)
+    }
 
     handleReset()
   }
