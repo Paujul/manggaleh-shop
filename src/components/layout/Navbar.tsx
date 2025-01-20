@@ -13,11 +13,6 @@ import { BalanceReducerState } from '@/reducers/balanceSlice'
 import Modal from './Modal'
 import Search from './Search'
 
-// interface NavLinkProps {
-//   href: string
-//   children: string
-// }
-
 const Navbar: FC = () => {
   const balance = useSelector((state: BalanceReducerState) => state.balance)
   const [open, setOpen] = useState(false)
