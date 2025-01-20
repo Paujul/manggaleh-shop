@@ -1,38 +1,33 @@
-import { type FC, useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { type FC, memo, useEffect, useMemo } from 'react'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 
 import Skeleton from '@/components/layout/Skeleton'
 import fetchData from '@/lib/products'
 import { setProducts } from '@/reducers/productSlice'
-import { Catalog } from '@/types/api'
+import type { Catalog } from '@/types/api'
 
 import CatalogCard from './CatalogCard'
 
-// Assuming Skeleton is correctly imported
-
 const Catalogs: FC = () => {
-  const [isLoading, setIsLoading] = useState(true) // State to track loading
-  const productData = useSelector(
-    (state: { products: { products: Catalog[] } }) => state.products.products
-  )
   const dispatch = useDispatch()
+  const productData = useSelector(
+    (state: { products: { products: Catalog[] } }) => state.products.products,
+    shallowEqual
+  )
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const data = await fetchData()
-        dispatch(setProducts(data.products))
-      } catch (error) {
-        console.error('Failed to fetch products:', error)
-      } finally {
-        setIsLoading(false) // Stop showing Skeletons once data is fetched
+      if (productData.length === 0) {
+        try {
+          const data = await fetchData()
+          dispatch(setProducts(data.products))
+        } catch (error) {
+          console.error('Failed to fetch products:', error)
+        }
       }
     }
-    if (productData.length === 0) {
-      fetchProducts()
-    } else {
-      setIsLoading(false) // Stop loading if data already exists
-    }
+
+    fetchProducts()
   }, [dispatch, productData.length])
 
   const skeletons = useMemo(
@@ -45,19 +40,25 @@ const Catalogs: FC = () => {
 
   const renderedProducts = useMemo(
     () =>
-      productData?.map((product: Catalog) => (
+      productData.map((product: Catalog) => (
         <CatalogCard key={product.id} product={product} />
       )),
     [productData]
   )
 
+  // const renderedProducts = productData.map((product: Catalog) => (
+  //   <CatalogCard key={product.id} product={product} />
+  // ))
+
+  console.log(productData)
+
   return (
     <div className='mt-5'>
       <div className='container mx-auto flex w-full flex-row flex-wrap items-center justify-around gap-5 rounded-lg bg-gray-100 p-2'>
-        {isLoading ? skeletons : renderedProducts}
+        {productData.length === 0 ? skeletons : renderedProducts}
       </div>
     </div>
   )
 }
 
-export default Catalogs
+export default memo(Catalogs) // Memoize the component

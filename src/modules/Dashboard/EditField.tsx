@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from 'react'
+import { type ChangeEvent, type FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import client from '@/lib/axios/client'
 import { setProducts } from '@/reducers/productSlice'
-import { Catalog } from '@/types/api'
+import type { Catalog } from '@/types/api'
 
 type AppProps = {
   editData?: Catalog | null
@@ -19,7 +19,7 @@ const EditField: FC<AppProps> = ({ editData }) => {
     setIsEditing(false) // Set isEditing to false
   }
 
-  const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEdit = (e: ChangeEvent<HTMLInputElement>) => {
     if (data) {
       setData({ ...data, [e.target.name]: e.target.value })
     }
@@ -39,7 +39,7 @@ const EditField: FC<AppProps> = ({ editData }) => {
             name: data.name,
             qty: Number(data.qty) as number,
             price: Number(data.price) as number,
-            imgId: data.imgId,
+            // image: data.image,
           })
           .then(async () => {
             // Trigger GET only after PUT completes
@@ -67,9 +67,6 @@ const EditField: FC<AppProps> = ({ editData }) => {
       setIsEditing(false)
     }
   }, [editData])
-
-  console.log('Edit Field data:', data)
-  console.log('Is Editing:', isEditing)
 
   return (
     <tr className='border-b bg-white'>

@@ -12,8 +12,8 @@ import { setBalance } from '@/reducers/balanceSlice'
 import { setProducts } from '@/reducers/productSlice'
 import { Catalog } from '@/types/api'
 
+import DashboardList from './DashboardProduct'
 import EditField from './EditField'
-import ProductList from './ProductList'
 
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 
@@ -91,7 +91,7 @@ const Dashboard: FC = () => {
               </thead>
               <tbody>
                 {products.map((item) => (
-                  <ProductList
+                  <DashboardList
                     key={item.id}
                     item={item}
                     handleEditProduct={handleEditProduct}

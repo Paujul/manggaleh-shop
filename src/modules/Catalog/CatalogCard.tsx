@@ -1,8 +1,10 @@
 import { CldImage } from 'next-cloudinary'
 import { useState } from 'react'
-import type { FC } from 'react'
+import type { FC, MouseEventHandler } from 'react'
 import { NumericFormat } from 'react-number-format'
 
+import { useAppDispatch } from '@/hooks/store'
+import { addToCartThunk } from '@/reducers/cartSlice'
 import { Catalog } from '@/types/api'
 
 interface CatalogCardProps {
@@ -10,9 +12,10 @@ interface CatalogCardProps {
 }
 
 const CatalogCard: FC<CatalogCardProps> = ({ product }) => {
+  const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(true)
   const [imageSrc, setImageSrc] = useState(
-    product.imgId || '/assets/image-unavailable-icon.avif'
+    product.image?.url ?? '/assets/image-unavailable-icon.avif'
   ) // Ensure the fallback path
 
   const handleImageError = () => {
@@ -20,8 +23,13 @@ const CatalogCard: FC<CatalogCardProps> = ({ product }) => {
       `Can't load image for product: ${product.name}, using fallback image`
     )
     setImageSrc(
-      'https://res.cloudinary.com/dkha2cdtw/image/upload/v1736312610/Manggaleh/image-unavailable-icon.avif'
+      'https://img.freepik.com/premium-vector/image-unavailable-icon_192037-900.jpg'
     ) // Dynamically set the fallback
+  }
+
+  const handleAddToCart: MouseEventHandler<HTMLButtonElement> = () => {
+    // dispatch(addToCartAndReduceQty({ product, qty: 1 }))
+    dispatch(addToCartThunk({ product, qty: 1 }))
   }
 
   return (
@@ -69,6 +77,7 @@ const CatalogCard: FC<CatalogCardProps> = ({ product }) => {
           <button
             className={product.qty > 0 ? 'button-primary' : 'button-empty'}
             disabled={product.qty === 0}
+            onClick={handleAddToCart}
           >
             {product.qty > 0 ? '+Keranjang' : 'Barang Habis'}
           </button>
