@@ -53,10 +53,13 @@ export async function POST(req: NextRequest) {
       }
     )
 
-    // If we get here, uploadResult is the actual Cloudinary response
+    // console.log(uploadResult)
+    // Cloudinary Response
     return NextResponse.json({
       message: 'File uploaded successfully',
-      fileUrl: uploadResult.secure_url, // Cloudinary file URL
+      url: uploadResult.secure_url, // Cloudinary file URL
+      publicId: uploadResult.public_id,
+      filename: uploadResult.original_filename, // Original file name
     })
   } catch (error: unknown) {
     console.error('Error uploading file:', error)

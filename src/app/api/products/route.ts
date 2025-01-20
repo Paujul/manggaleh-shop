@@ -5,7 +5,13 @@ const prisma = new PrismaClient()
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany()
+    // Include related images in the query
+    const products = await prisma.product.findMany({
+      include: {
+        image: true, // Include the related image object
+      },
+    })
+
     return NextResponse.json({ success: true, products })
   } catch (error) {
     console.error('Error fetching products:', error)
@@ -20,11 +26,46 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
-    // Validate input data
-    const { name, price, qty, imgId } = body
-    if (!name || !price || !qty || !imgId) {
+    // Destructure input fields
+    const { name, price, qty, image } = body
+    console.log(body)
+
+    // Validate required fields
+    if (!name || typeof name !== 'string') {
       return NextResponse.json(
-        { success: false, error: 'All fields are required' },
+        { success: false, error: 'Name is required and must be a string' },
+        { status: 400 }
+      )
+    }
+    if (!price || isNaN(Number(price)) || Number(price) <= 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Price is required and must be a positive number',
+        },
+        { status: 400 }
+      )
+    }
+    if (
+      !qty ||
+      isNaN(Number(qty)) ||
+      Number(qty) <= 0 ||
+      !Number.isInteger(Number(qty))
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Quantity is required and must be a positive integer',
+        },
+        { status: 400 }
+      )
+    }
+    if (!image || !image.url || !image.publicId || !image.filename) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Image details (url, publicId, filename) are required',
+        },
         { status: 400 }
       )
     }
@@ -35,7 +76,13 @@ export async function POST(req: NextRequest) {
         name,
         price: Number(price),
         qty: Number(qty),
-        imgId, // Cloudinary image ID
+        image: {
+          create: {
+            publicId: image.publicId,
+            filename: image.filename,
+            url: image.url,
+          },
+        },
       },
     })
 
@@ -46,38 +93,41 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error creating product:', error)
     return NextResponse.json(
-      { success: false, error: 'Failed to create product' },
+      {
+        success: false,
+        error: 'An unexpected error occurred while creating the product',
+      },
       { status: 500 }
     )
   }
 }
 
-export async function PUT(req: NextRequest) {
-  try {
-    const body = await req.json()
-    const { id, name, price, qty, imgId } = body
+// export async function PUT(req: NextRequest) {
+//   try {
+//     const body = await req.json()
+//     const { id, name, price, qty, imgId } = body
 
-    if (!id || !name || !price || !qty) {
-      return NextResponse.json(
-        { success: false, error: 'All fields are required' },
-        { status: 400 }
-      )
-    }
+//     if (!id || !name || !price || !qty) {
+//       return NextResponse.json(
+//         { success: false, error: 'All fields are required' },
+//         { status: 400 }
+//       )
+//     }
 
-    const updatedProduct = await prisma.product.update({
-      where: { id },
-      data: { name, price: Number(price), qty: Number(qty), imgId },
-    })
+//     const updatedProduct = await prisma.product.update({
+//       where: { id },
+//       data: { name, price: Number(price), qty: Number(qty), imgId },
+//     })
 
-    return NextResponse.json({ success: true, product: updatedProduct })
-  } catch (error) {
-    console.error('Error updating product:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to update product' },
-      { status: 500 }
-    )
-  }
-}
+//     return NextResponse.json({ success: true, product: updatedProduct })
+//   } catch (error) {
+//     console.error('Error updating product:', error)
+//     return NextResponse.json(
+//       { success: false, error: 'Failed to update product' },
+//       { status: 500 }
+//     )
+//   }
+// }
 
 export async function DELETE(req: NextRequest) {
   try {

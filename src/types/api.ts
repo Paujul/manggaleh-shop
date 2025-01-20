@@ -13,7 +13,14 @@ export interface Catalog {
   name: string
   price: number
   qty: number
-  imgId?: string
+  image?: Image
+}
+
+export interface Image {
+  id: number
+  filename: string
+  url: string
+  publicId: string
 }
 
 // Type for the API response

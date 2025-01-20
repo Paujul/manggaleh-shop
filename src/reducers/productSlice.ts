@@ -34,11 +34,19 @@ export const productSlice = createSlice({
         state.products[index] = action.payload
       }
     },
+    reduceProductQty: (state, action) => {
+      const { id, qty } = action.payload
+      const product = state.products.find((p) => p.id === id)
+      if (product) {
+        product.qty -= qty
+      }
+    },
   },
 })
 
 // Export actions
-export const { setProducts, editProduct } = productSlice.actions
+export const { setProducts, editProduct, reduceProductQty } =
+  productSlice.actions
 
 // Selector to get products from the state
 // export const selectProducts = (state: ProductState): Product[] => state.products.products
