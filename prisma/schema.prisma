@@ -13,18 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int      @id @default(autoincrement())
-  email String   @unique
-  name  String?
-  // products Product[]
-}
-
 model Product {
   id    Int     @id @default(autoincrement())
   name  String
   price Int
   qty   Int
-  imgId String
-  // user  User
+  image Image?
 }
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  url       String
+  publicId  String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int      @unique
+}
+
+
