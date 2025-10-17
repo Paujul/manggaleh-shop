@@ -15,7 +15,11 @@ export const Row = ({ product }: AppProps) => {
       <div className='size-5 border-2 border-gray-500 rounded-sm' />
       <Cell className='flex-[2] min-w-0 flex gap-2 items-center'>
         <img
-          src='https://images.pexels.com/photos/25740960/pexels-photo-25740960.jpeg'
+          src={
+            product.imgUrl
+              ? product.imgUrl
+              : 'https://images.pexels.com/photos/25740960/pexels-photo-25740960.jpeg'
+          }
           alt='Product Image'
           className='object-cover rounded-lg size-10 shrink-0'
         />
