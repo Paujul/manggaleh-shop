@@ -70,8 +70,6 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
     }
   }
 
-  console.log(createProduct.isPending)
-
   return (
     <form
       onSubmit={handleSubmit}
