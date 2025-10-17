@@ -1,42 +1,76 @@
-import axios from 'axios'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-// import { useCreateProduct } from '@/services/mutations/useCreateProduct'
+import getButtonStyle from './getButtonStyle'
+import FormImageInput from './FormImageInput'
+import {
+  handleImageUpload,
+  type UploadProgressState,
+} from './handleImageUpload'
+import { useCreateProduct } from '@/services/mutations/useCreateProduct'
+import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
+import { cn } from '@/utils/cn'
 
-export default function Form() {
-  // const createProduct = useCreateProduct()
-  const [imgFile, setImgFile] = useState<string | null>(null)
+export default function Form({ open, onOpenChange }: FormDialogProps) {
+  const createProduct = useCreateProduct()
+  const [imgFile, setImgFile] = useState<File | undefined>()
+  const [previewImage, setPreviewImage] = useState<string | undefined>()
+  const [uploadProgress, setUploadProgress] = useState<UploadProgressState>({
+    percent: 0,
+    label: 'Submit',
+  })
 
-  async function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    // Check if file is !null, buat TS doang jir
+  // Upload progress tracker
+  const idleStates = ['Submit', 'Complete']
+  const isIdleState = idleStates.some(
+    (label) => uploadProgress.label.toLowerCase() === label.toLowerCase()
+  )
+  const clampedProgress = Math.min(Math.max(uploadProgress.percent, 0), 100)
+
+  /*
+   * Tracker for uploading, createProduct & Cloudinary upload are separate
+   * can't use createProduct's isPending when uploading thus making
+   * the Submit button disabled only when uploaded
+   * Hence why there should be another var (Trying not to create another useState)
+   */
+  const isUploading = !idleStates.includes(uploadProgress.label)
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files[0])
-      setImgFile(URL.createObjectURL(e.target.files[0]))
-
-      const imageFormData = new FormData()
-      imageFormData.append('upload_preset', 'manggaleh')
-      imageFormData.append('tags', 'browser_upload')
-      imageFormData.append('file', e.target.files[0])
-      console.log(imageFormData)
-
-      const res = await axios.post(
-        'https://api.cloudinary.com/v1_1/manggaleh/upload',
-        imageFormData
-      )
-
-      console.log(res.data.secure_url)
+      setImgFile(e.target.files[0])
+      setPreviewImage(URL.createObjectURL(e.target.files[0]))
+      setUploadProgress({ percent: 0, label: 'Submit' })
     }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const formElement = e.currentTarget
 
-    // const formData = new FormData(e.currentTarget)
-    // createProduct.mutate({
-    //   name: String(formData.get('name')),
-    //   price: Number(formData.get('price')),
-    //   qty: Number(formData.get('qty')),
-    // })
+    try {
+      const imgUrl = await handleImageUpload(imgFile, setUploadProgress)
+      if (!imgUrl) {
+        setUploadProgress({ percent: 0, label: 'Submit' })
+      }
+
+      const formData = new FormData(formElement)
+
+      setUploadProgress({ percent: 100, label: 'Saving...' })
+
+      await createProduct.mutateAsync({
+        name: String(formData.get('name')),
+        price: Number(formData.get('price')),
+        qty: Number(formData.get('qty')),
+        imgUrl: imgUrl ? imgUrl : undefined,
+      })
+
+      setUploadProgress({ percent: 100, label: 'Complete' })
+      onOpenChange(!open)
+    } catch (error) {
+      console.error('Failed to create product', error)
+      setUploadProgress({ percent: 0, label: 'Submit' })
+    }
   }
+
+  console.log(createProduct.isPending)
 
   return (
     <form
@@ -69,33 +103,21 @@ export default function Form() {
         />
       </label>
 
-      <label htmlFor='product-image'>
-        <span className='mb-2'>Product Image</span>
-        <input
-          type='file'
-          name='product-image'
-          id='product-image'
-          onChange={(e) => handleChange(e)}
-          className='hidden'
-        />
-        {imgFile ? (
-          <img
-            src={imgFile}
-            alt='Preview Image'
-            className='mx-auto mt-2 object-contain h-64'
-          />
-        ) : (
-          <div className='mx-auto text-gray-400 text-2xl font-medium size-64 border-2 rounded-lg border-dashed my-3 flex items-center justify-center'>
-            Preview Image Here
-          </div>
-        )}
-      </label>
+      <FormImageInput
+        handleChange={(e) => handleImageChange(e)}
+        previewImage={previewImage}
+      />
 
       <button
         type='submit'
-        className='hover:cursor-pointer p-3 rounded-lg font-medium bg-[#434343] text-white text-xl'
+        className={cn(
+          'hover:cursor-pointer p-3 rounded-lg font-medium text-xl',
+          createProduct.isPending || (isUploading && 'hover:cursor-not-allowed')
+        )}
+        style={getButtonStyle(isIdleState, clampedProgress)}
+        disabled={createProduct.isPending || isUploading}
       >
-        Submit
+        {uploadProgress.label}
       </button>
     </form>
   )

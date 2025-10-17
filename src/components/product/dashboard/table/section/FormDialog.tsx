@@ -6,7 +6,12 @@ import {
 } from '@/components/ui/dialog'
 import { X } from 'lucide-react'
 
-function FormDialog() {
+export type FormDialogProps = {
+  open: boolean
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function FormDialog({ open, onOpenChange }: FormDialogProps) {
   return (
     <>
       <DialogDescription className='sr-only'>
@@ -21,7 +26,7 @@ function FormDialog() {
         </DialogClose>
       </div>
 
-      <Form />
+      <Form open={open} onOpenChange={onOpenChange} />
     </>
   )
 }
