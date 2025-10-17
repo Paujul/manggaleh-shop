@@ -5,6 +5,7 @@ export interface Product {
   reviews?: number
   price: number
   qty?: number
+  imgUrl?: string
   created_at: Date
 }
 

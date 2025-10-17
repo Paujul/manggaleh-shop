@@ -6,6 +6,7 @@ interface CreateProductInput {
   name: string
   price: number
   qty: number
+  imgUrl?: string
 }
 
 export function useCreateProduct() {
