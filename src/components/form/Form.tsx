@@ -8,6 +8,7 @@ import {
 import { useCreateProduct } from '@/services/mutations/useCreateProduct'
 import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
 import { cn } from '@/utils/cn'
+import { toast } from 'sonner'
 
 export default function Form({ open, onOpenChange }: FormDialogProps) {
   const createProduct = useCreateProduct()
@@ -64,6 +65,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
 
       setUploadProgress({ percent: 100, label: 'Complete' })
       onOpenChange(!open)
+      toast.success('Product created!')
     } catch (error) {
       console.error('Failed to create product', error)
       setUploadProgress({ percent: 0, label: 'Submit' })
