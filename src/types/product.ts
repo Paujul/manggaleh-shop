@@ -6,6 +6,8 @@ export interface Product {
   price: number
   qty?: number
   imgUrl?: string
+  imgPublicId: string
+  imgDeleteToken: string
   created_at: Date
 }
 
