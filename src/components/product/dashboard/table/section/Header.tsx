@@ -9,7 +9,7 @@ const Header = () => {
       <Cell>Stock</Cell>
       <Cell>Price</Cell>
       <Cell>Status</Cell>
-      <Cell>Action</Cell>
+      <Cell className='text-center'>Action</Cell>
     </div>
   )
 }
