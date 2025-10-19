@@ -1,3 +1,4 @@
+import { CLOUDINARY_CLOUD_NAME } from '@/constants/env'
 import axios from 'axios'
 import type { Dispatch, SetStateAction } from 'react'
 
@@ -21,7 +22,7 @@ export async function handleImageUpload(
 
   try {
     const res = await axios.post(
-      'https://api.cloudinary.com/v1_1/manggaleh/upload',
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`,
       imageFormData,
       {
         onUploadProgress: (progressEvent) => {
