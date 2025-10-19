@@ -20,3 +20,18 @@ export async function createProduct(
   if (error) throw error
   return data
 }
+
+export async function editProduct(
+  id: number,
+  payload: Partial<CreateProductPayload>
+): Promise<Product | null> {
+  const { data, error } = await supabase
+    .from('product')
+    .update(payload)
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
