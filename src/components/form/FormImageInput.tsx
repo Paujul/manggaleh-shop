@@ -1,20 +1,25 @@
-import type { ChangeEvent } from 'react'
+import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 
 type ComponentProps = {
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void
+  imageField: UseFormRegisterReturn<'imgFile'>
   previewImage: string | null | undefined
+  error?: FieldError
 }
 
-function FormImageInput({ handleChange, previewImage }: ComponentProps) {
+function FormImageInput({ imageField, previewImage, error }: ComponentProps) {
+  const errorMessage = error?.message
+
   return (
     <label htmlFor='product-image'>
       <span className='mb-2'>Product Image</span>
+      {errorMessage && (
+        <span className='ml-2 text-red-500'>*{errorMessage}</span>
+      )}
       <input
         type='file'
-        name='product-image'
         id='product-image'
-        onChange={(e) => handleChange(e)}
         className='hidden'
+        {...imageField}
       />
       {previewImage ? (
         <img

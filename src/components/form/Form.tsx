@@ -1,4 +1,5 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useForm, type FieldError } from 'react-hook-form'
+import { useState, type ChangeEvent } from 'react'
 import getButtonStyle from './getButtonStyle'
 import FormImageInput from './FormImageInput'
 import {
@@ -9,9 +10,16 @@ import { useCreateProduct } from '@/services/mutations/useCreateProduct'
 import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
 import { cn } from '@/utils/cn'
 import { toast } from 'sonner'
+import type { Product } from '@/types/product'
 
 export default function Form({ open, onOpenChange }: FormDialogProps) {
   const createProduct = useCreateProduct()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+
   const [imgFile, setImgFile] = useState<File | undefined>()
   const [previewImage, setPreviewImage] = useState<string | undefined>()
   const [uploadProgress, setUploadProgress] = useState<UploadProgressState>({
@@ -27,8 +35,8 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
   const clampedProgress = Math.min(Math.max(uploadProgress.percent, 0), 100)
 
   /*
-   * Tracker for uploading, createProduct & Cloudinary upload are separate
-   * can't use createProduct's isPending when uploading thus making
+   * Tracker for uploading, createProduct & Cloudinary upload are separate,
+   * we can't use createProduct's isPending when uploading thus making
    * the Submit button disabled only when uploaded
    * Hence why there should be another var (Trying not to create another useState)
    */
@@ -42,24 +50,36 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
     }
   }
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formElement = e.currentTarget
+  const imageField = register('imgFile', {
+    validate: (files) => {
+      const acceptedFormats = ['jpg', 'jpeg', 'png']
+      const fileExtension = files?.[0]?.name?.split('.').pop()?.toLowerCase()
+      if (fileExtension && !acceptedFormats.includes(fileExtension)) {
+        return 'Invalid file format. Accepted formats: jpg, jpeg, png'
+      }
+      const maxSize = 5 * 1024 * 1024 // 5MB
+      if (files?.[0] && files[0].size > maxSize) {
+        return 'Size must be within 5MB'
+      }
+      return true
+    },
+    onChange: (event) => handleImageChange(event),
+  })
 
+  const onSubmit = async (data: Product) => {
+    console.log(data)
     try {
       const imgUrl = await handleImageUpload(imgFile, setUploadProgress)
       if (!imgUrl) {
         setUploadProgress({ percent: 0, label: 'Submit' })
       }
 
-      const formData = new FormData(formElement)
-
       setUploadProgress({ percent: 100, label: 'Saving...' })
 
       await createProduct.mutateAsync({
-        name: String(formData.get('name')),
-        price: Number(formData.get('price')),
-        qty: Number(formData.get('qty')),
+        name: data.name,
+        price: data.price,
+        qty: data.qty!,
         imgUrl: imgUrl ? imgUrl : undefined,
       })
 
@@ -74,38 +94,59 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className='flex flex-col gap-3 max-w-lg rounded-lg'
     >
-      <label htmlFor='name' className='flex flex-col gap-1 '>
-        <span>Product Name</span>
+      <div className='flex flex-col gap-1 '>
+        <label htmlFor='name'>Product Name</label>
         <input
-          name='name'
           type='text'
           className='border-2 rounded-lg border-gray-400 py-1 px-2'
+          id='name'
+          autoComplete='off'
+          {...register('name', { required: true })}
         />
-      </label>
-      <label htmlFor='price' className='flex flex-col gap-1 relative'>
-        <span>Price</span>
+        {errors.name && <span>Error</span>}
+      </div>
+      <div className='flex flex-col gap-1 relative'>
+        <label htmlFor='price'>Price</label>
         <input
-          name='price'
-          type='text'
           className='border-2 rounded-lg border-gray-400 py-1 pl-7 pr-2'
+          id='price'
+          type='number'
+          autoComplete='off'
+          {...register('price', {
+            required: true,
+            maxLength: 7,
+            min: 0,
+            valueAsNumber: true,
+          })}
         />
+        {errors.price && <span>Error</span>}
         <span className='absolute left-2 top-8.5'>Rp</span>
-      </label>
-      <label htmlFor='qty' className='flex flex-col gap-1 '>
-        <span>Qty</span>
+      </div>
+      <div className='flex flex-col gap-1 '>
+        <label htmlFor='qty'>Qty</label>
+
         <input
-          name='qty'
-          type='text'
           className='border-2 rounded-lg border-gray-400 py-1 px-2'
+          id='qty'
+          type='number'
+          autoComplete='off'
+          {...register('qty', {
+            required: true,
+            maxLength: 3,
+            min: 0,
+            valueAsNumber: true,
+          })}
         />
-      </label>
+        {errors.qty && <span>Error</span>}
+      </div>
 
       <FormImageInput
-        handleChange={(e) => handleImageChange(e)}
+        imageField={imageField}
         previewImage={previewImage}
+        error={errors.imgFile as FieldError}
       />
 
       <button
