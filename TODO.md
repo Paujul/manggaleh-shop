@@ -9,9 +9,14 @@
             [] Description
             [] User
 [] Product Form
-    [] Form Input
-    [] Form Validation
-    [] Image Upload
+    [x] Form Input
+    [x] Form Validation
+    [x] Image Upload
+    [] Validation
+        [] Name
+        [] Price
+        [] Qty
+        [] Image
 [] Enhancements
     [] User
         [] Auth
