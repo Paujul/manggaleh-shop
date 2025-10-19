@@ -12,13 +12,17 @@ import { cn } from '@/utils/cn'
 import { toast } from 'sonner'
 import type { Product } from '@/types/product'
 
+type ProductFormData = Omit<Product, 'id' | 'imgUrl'> & {
+  imgFile?: FileList
+}
+
 export default function Form({ open, onOpenChange }: FormDialogProps) {
   const createProduct = useCreateProduct()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm<ProductFormData>()
 
   const [imgFile, setImgFile] = useState<File | undefined>()
   const [previewImage, setPreviewImage] = useState<string | undefined>()
@@ -66,7 +70,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
     onChange: (event) => handleImageChange(event),
   })
 
-  const onSubmit = async (data: Product) => {
+  const onSubmit = async (data: ProductFormData) => {
     console.log(data)
     try {
       const imgUrl = await handleImageUpload(imgFile, setUploadProgress)
@@ -106,7 +110,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
           autoComplete='off'
           {...register('name', { required: true })}
         />
-        {errors.name && <span>Error</span>}
+        {errors.name && <span className='text-red-500'>*Error</span>}
       </div>
       <div className='flex flex-col gap-1 relative'>
         <label htmlFor='price'>Price</label>
@@ -122,7 +126,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
             valueAsNumber: true,
           })}
         />
-        {errors.price && <span>Error</span>}
+        {errors.price && <span className='text-red-500'>*Error</span>}
         <span className='absolute left-2 top-8.5'>Rp</span>
       </div>
       <div className='flex flex-col gap-1 '>
@@ -140,7 +144,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
             valueAsNumber: true,
           })}
         />
-        {errors.qty && <span>Error</span>}
+        {errors.qty && <span className='text-red-500'>*Error</span>}
       </div>
 
       <FormImageInput
