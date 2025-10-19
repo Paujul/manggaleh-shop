@@ -7,7 +7,8 @@ interface CreateProductInput {
   price: number
   qty: number
   imgUrl?: string
-  imgPublicId?: string
+  imgPublicId: string
+  imgDeleteToken: string
 }
 
 export function useCreateProduct() {
