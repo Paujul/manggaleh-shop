@@ -4,14 +4,24 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog'
+import type { Product } from '@/types/product'
 import { X } from 'lucide-react'
+import { useState } from 'react'
 
 export type FormDialogProps = {
   open: boolean
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+  isEdit: boolean
+  product?: Product
 }
 
-function FormDialog({ open, onOpenChange }: FormDialogProps) {
+function FormDialog({
+  open,
+  onOpenChange,
+  isEdit = false,
+  product,
+}: FormDialogProps) {
+  const [formStatus, setFormStatus] = useState(isEdit)
   return (
     <>
       <DialogDescription className='sr-only'>
@@ -19,14 +29,20 @@ function FormDialog({ open, onOpenChange }: FormDialogProps) {
       </DialogDescription>
       <div className='flex justify-center items-center'>
         <DialogTitle className='text-center text-2xl font-medium flex-1'>
-          Create Product
+          {product?.name ? 'Edit Product' : 'Create Product'}
         </DialogTitle>
         <DialogClose>
           <X className='cursor-pointer' />
         </DialogClose>
       </div>
 
-      <Form open={open} onOpenChange={onOpenChange} />
+      <Form
+        open={open}
+        onOpenChange={onOpenChange}
+        isEdit={formStatus}
+        setFormStatus={setFormStatus}
+        product={product}
+      />
     </>
   )
 }

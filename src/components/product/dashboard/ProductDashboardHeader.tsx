@@ -33,6 +33,7 @@ export default function ProductDashboardHeader() {
             <FormDialog
               open={isFormModalOpen}
               onOpenChange={setIsFormModalOpen}
+              isEdit={false}
             />
           </DialogContent>
         </Dialog>

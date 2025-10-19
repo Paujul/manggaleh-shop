@@ -1,5 +1,10 @@
 import { useForm, type FieldError } from 'react-hook-form'
-import { useState, type ChangeEvent } from 'react'
+import {
+  useState,
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction,
+} from 'react'
 import getButtonStyle from './getButtonStyle'
 import FormImageInput from './FormImageInput'
 import {
@@ -11,13 +16,26 @@ import type { FormDialogProps } from '../product/dashboard/table/section/FormDia
 import { cn } from '@/utils/cn'
 import { toast } from 'sonner'
 import type { Product } from '@/types/product'
+import { handleImageDelete } from './handleImageDelete'
+import { useEditProduct } from '@/services/mutations/useEditProduct'
+
+type FormProps = FormDialogProps & {
+  setFormStatus: Dispatch<SetStateAction<boolean>>
+}
 
 type ProductFormData = Omit<Product, 'id' | 'imgUrl'> & {
   imgFile?: FileList
 }
 
-export default function Form({ open, onOpenChange }: FormDialogProps) {
+export default function Form({
+  open,
+  onOpenChange,
+  isEdit,
+  product,
+}: FormProps) {
+  console.log(isEdit)
   const createProduct = useCreateProduct()
+  const editProduct = useEditProduct()
   const {
     register,
     handleSubmit,
@@ -71,30 +89,65 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
   })
 
   const onSubmit = async (data: ProductFormData) => {
-    console.log(data)
-    try {
-      const uploadedImage = await handleImageUpload(imgFile, setUploadProgress)
-      if (!uploadedImage) {
+    if (isEdit && product) {
+      try {
+        const replacedImage = await handleImageDelete(
+          product?.imgPublicId,
+          product?.imgDeleteToken,
+          imgFile,
+          setUploadProgress
+        )
+
+        if (!replacedImage) {
+          setUploadProgress({ percent: 0, label: 'Submit' })
+        }
+
+        setUploadProgress({ percent: 100, label: 'Saving...' })
+
+        await editProduct.mutateAsync({
+          id: product.id,
+          name: data.name,
+          price: data.price,
+          qty: data.qty!,
+          imgUrl: replacedImage ? replacedImage.url : undefined,
+          imgPublicId: replacedImage ? replacedImage.publicId : undefined,
+          imgDeleteToken: replacedImage ? replacedImage.deleteToken : undefined,
+        })
+
+        setUploadProgress({ percent: 100, label: 'Complete' })
+        onOpenChange(!open)
+        toast.success('Product created!')
+      } catch (err) {
+        console.error(err)
+      }
+    } else
+      try {
+        const uploadedImage = await handleImageUpload(
+          imgFile,
+          setUploadProgress
+        )
+        if (!uploadedImage) {
+          setUploadProgress({ percent: 0, label: 'Submit' })
+        }
+
+        setUploadProgress({ percent: 100, label: 'Saving...' })
+
+        await createProduct.mutateAsync({
+          name: data.name,
+          price: data.price,
+          qty: data.qty!,
+          imgUrl: uploadedImage ? uploadedImage.url : undefined,
+          imgPublicId: uploadedImage ? uploadedImage.publicId : undefined,
+          imgDeleteToken: uploadedImage ? uploadedImage.deleteToken : undefined,
+        })
+
+        setUploadProgress({ percent: 100, label: 'Complete' })
+        onOpenChange(!open)
+        toast.success('Product created!')
+      } catch (error) {
+        console.error('Failed to create product', error)
         setUploadProgress({ percent: 0, label: 'Submit' })
       }
-
-      setUploadProgress({ percent: 100, label: 'Saving...' })
-
-      await createProduct.mutateAsync({
-        name: data.name,
-        price: data.price,
-        qty: data.qty!,
-        imgUrl: uploadedImage ? uploadedImage.url : undefined,
-        imgPublicId: uploadedImage ? uploadedImage.publicId : undefined,
-      })
-
-      setUploadProgress({ percent: 100, label: 'Complete' })
-      onOpenChange(!open)
-      toast.success('Product created!')
-    } catch (error) {
-      console.error('Failed to create product', error)
-      setUploadProgress({ percent: 0, label: 'Submit' })
-    }
   }
 
   return (
@@ -109,6 +162,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
           className='border-2 rounded-lg border-gray-400 py-1 px-2'
           id='name'
           autoComplete='off'
+          defaultValue={product?.name}
           {...register('name', { required: true })}
         />
         {errors.name && <span className='text-red-500'>*Error</span>}
@@ -120,6 +174,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
           id='price'
           type='number'
           autoComplete='off'
+          defaultValue={product?.price}
           {...register('price', {
             required: true,
             maxLength: 7,
@@ -138,6 +193,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
           id='qty'
           type='number'
           autoComplete='off'
+          defaultValue={product?.qty}
           {...register('qty', {
             required: true,
             maxLength: 3,
@@ -152,6 +208,7 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
         imageField={imageField}
         previewImage={previewImage}
         error={errors.imgFile as FieldError}
+        existingImage={product?.imgUrl}
       />
 
       <button

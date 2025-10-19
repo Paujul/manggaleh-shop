@@ -4,9 +4,15 @@ type ComponentProps = {
   imageField: UseFormRegisterReturn<'imgFile'>
   previewImage: string | null | undefined
   error?: FieldError
+  existingImage: string | undefined
 }
 
-function FormImageInput({ imageField, previewImage, error }: ComponentProps) {
+function FormImageInput({
+  imageField,
+  previewImage,
+  error,
+  existingImage,
+}: ComponentProps) {
   const errorMessage = error?.message
 
   return (
@@ -21,9 +27,9 @@ function FormImageInput({ imageField, previewImage, error }: ComponentProps) {
         className='hidden'
         {...imageField}
       />
-      {previewImage ? (
+      {previewImage || existingImage ? (
         <img
-          src={previewImage}
+          src={previewImage || existingImage}
           alt='Preview Image'
           className='mx-auto mt-2 object-contain h-64'
         />
