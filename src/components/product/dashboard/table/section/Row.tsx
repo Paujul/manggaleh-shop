@@ -1,5 +1,11 @@
 import type { Product } from '@/types/product'
 import { Cell } from './Cell'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import ActionPopover from './ActionPopover'
 
 type AppProps = {
   product: Product
@@ -31,7 +37,17 @@ export const Row = ({ product }: AppProps) => {
       <Cell className={getQtyClassName(product.qty ?? 0)}>{product.qty}</Cell>
       <Cell>Rp {product.price}</Cell>
       <Cell>Status</Cell>
-      <Cell>Action</Cell>
+      <Cell className='text-center'>
+        <Popover>
+          <PopoverTrigger className='hover:cursor-pointer'>
+            <span>•••</span>
+          </PopoverTrigger>
+
+          <PopoverContent className='w-auto'>
+            <ActionPopover />
+          </PopoverContent>
+        </Popover>
+      </Cell>
     </div>
   )
 }
