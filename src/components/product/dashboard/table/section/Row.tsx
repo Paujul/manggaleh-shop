@@ -44,7 +44,7 @@ export const Row = ({ product }: AppProps) => {
           </PopoverTrigger>
 
           <PopoverContent className='w-auto'>
-            <ActionPopover />
+            <ActionPopover product={product} />
           </PopoverContent>
         </Popover>
       </Cell>
