@@ -73,8 +73,8 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
   const onSubmit = async (data: ProductFormData) => {
     console.log(data)
     try {
-      const imgUrl = await handleImageUpload(imgFile, setUploadProgress)
-      if (!imgUrl) {
+      const uploadedImage = await handleImageUpload(imgFile, setUploadProgress)
+      if (!uploadedImage) {
         setUploadProgress({ percent: 0, label: 'Submit' })
       }
 
@@ -84,7 +84,8 @@ export default function Form({ open, onOpenChange }: FormDialogProps) {
         name: data.name,
         price: data.price,
         qty: data.qty!,
-        imgUrl: imgUrl ? imgUrl : undefined,
+        imgUrl: uploadedImage ? uploadedImage.url : undefined,
+        imgPublicId: uploadedImage ? uploadedImage.publicId : undefined,
       })
 
       setUploadProgress({ percent: 100, label: 'Complete' })

@@ -46,7 +46,7 @@ export async function handleImageUpload(
     )
 
     setUploadProgress({ percent: 100, label: 'Processing...' })
-    return res.data.secure_url as string
+    return { url: res.data.secure_url, publicId: res.data.public_id }
   } catch (error) {
     setUploadProgress({ percent: 0, label: 'Submit' })
     throw error
