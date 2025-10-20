@@ -3,7 +3,7 @@ import { editProduct } from '../product'
 import { getQueryKey } from '../queries/useGetProduct'
 
 interface EditProductInput {
-  id: number
+  id: string
   name?: string
   price?: number
   qty?: number
