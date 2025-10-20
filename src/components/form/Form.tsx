@@ -91,12 +91,15 @@ export default function Form({
   const onSubmit = async (data: ProductFormData) => {
     if (isEdit && product) {
       try {
-        const replacedImage = await handleImageDelete(
-          product?.imgPublicId,
-          product?.imgDeleteToken,
-          imgFile,
-          setUploadProgress
-        )
+        let replacedImage
+        if (imgFile) {
+          replacedImage = await handleImageDelete(
+            product?.imgPublicId,
+            product?.imgDeleteToken,
+            imgFile,
+            setUploadProgress
+          )
+        }
 
         if (!replacedImage) {
           setUploadProgress({ percent: 0, label: 'Submit' })

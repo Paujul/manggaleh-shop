@@ -3,13 +3,16 @@ import type { Product } from '@/types/product'
 import { SquarePen, Trash2 } from 'lucide-react'
 import FormDialog from './FormDialog'
 import { useState } from 'react'
+import DeleteModal from '@/components/modal/DeleteModal'
 
-type Props = {
+export type Modalprops = {
   product: Product
 }
 
-function ActionPopover({ product }: Props) {
+function ActionPopover({ product }: Modalprops) {
   const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+
   return (
     <div className='flex gap-4'>
       <Dialog open={isFormModalOpen} onOpenChange={setIsFormModalOpen}>
@@ -26,7 +29,16 @@ function ActionPopover({ product }: Props) {
           />
         </DialogContent>
       </Dialog>
-      <Trash2 size={22} color='red' />
+
+      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DialogTrigger>
+          <Trash2 size={22} color='red' />
+        </DialogTrigger>
+
+        <DialogContent showCloseButton={false}>
+          <DeleteModal product={product} />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
