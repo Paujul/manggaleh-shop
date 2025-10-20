@@ -22,7 +22,7 @@ export async function createProduct(
 }
 
 export async function editProduct(
-  id: number,
+  id: string,
   payload: Partial<CreateProductPayload>
 ): Promise<Product | null> {
   const { data, error } = await supabase
@@ -34,4 +34,10 @@ export async function editProduct(
 
   if (error) throw error
   return data
+}
+
+export async function deleteProduct(id: string): Promise<void> {
+  const { error } = await supabase.from('product').delete().eq('id', id)
+
+  if (error) throw error
 }
