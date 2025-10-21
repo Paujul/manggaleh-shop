@@ -1,21 +1,41 @@
 import { useDeleteProduct } from '@/services/mutations/useDeleteProduct'
-import type { Modalprops } from '../product/dashboard/table/section/ActionPopover'
+import type { ModalProps } from '../product/dashboard/table/section/ActionPopover'
 import Button from '../ui/Button'
 import { DialogDescription, DialogTitle } from '../ui/dialog'
-// import { handleImageDelete } from '../form/handleImageDelete'
+import { handleImageDelete } from '../form/handleImageDelete'
+import { useState, type Dispatch, type SetStateAction } from 'react'
+import type { UploadProgressState } from '../form/handleImageUpload'
+import { LoaderCircle } from 'lucide-react'
 
-function DeleteModal({ product }: Modalprops) {
+type DeleteModalProps = ModalProps & {
+  isDeleting: boolean
+  setIsDeleting: Dispatch<SetStateAction<boolean>>
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function DeleteModal({
+  product,
+  isDeleting,
+  setIsDeleting,
+  onOpenChange,
+}: DeleteModalProps) {
   const deleteProduct = useDeleteProduct()
+  const [, setUploadProgress] = useState<UploadProgressState>({
+    percent: 0,
+    label: 'Deleting...',
+  })
 
   const handleDeleteProduct = async (id: string) => {
-    // await handleImageDelete(
-    //   product?.imgPublicId,
-    //   product?.imgDeleteToken,
-    //   imgFile,
-    //   setUploadProgress
-    // )
+    setIsDeleting(true)
+    await handleImageDelete(product?.imgPublicId, setUploadProgress)
     await deleteProduct.mutateAsync(id)
+    setIsDeleting(false)
   }
+
+  const handleCloseModal = () => {
+    onOpenChange(false)
+  }
+
   return (
     <div className='flex flex-col gap-5'>
       <DialogDescription className='sr-only'>
@@ -27,12 +47,14 @@ function DeleteModal({ product }: Modalprops) {
       <span>This action is irreversible</span>
 
       <div className='flex items-center gap-4 ml-auto'>
-        <Button>Cancel</Button>
+        <Button onClick={handleCloseModal} disabled={isDeleting}>
+          Cancel
+        </Button>
         <Button
           className='text-white bg-black border-black'
           onClick={() => handleDeleteProduct(product.id)}
         >
-          Confirm
+          {isDeleting ? <LoaderCircle className='animate-spin' /> : 'Confirm'}
         </Button>
       </div>
     </div>

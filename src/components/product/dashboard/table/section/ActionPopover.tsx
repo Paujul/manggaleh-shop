@@ -5,19 +5,24 @@ import FormDialog from './FormDialog'
 import { useState } from 'react'
 import DeleteModal from '@/components/modal/DeleteModal'
 
-export type Modalprops = {
+export type ModalProps = {
   product: Product
 }
 
-function ActionPopover({ product }: Modalprops) {
+function ActionPopover({ product }: ModalProps) {
   const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
+
+  const isOverlayDisabled = (e: Event) => {
+    if (isDeleting) e.preventDefault()
+  }
 
   return (
     <div className='flex gap-4'>
       <Dialog open={isFormModalOpen} onOpenChange={setIsFormModalOpen}>
         <DialogTrigger>
-          <SquarePen size={22} />
+          <SquarePen size={22} className='hover:cursor-pointer' />
         </DialogTrigger>
 
         <DialogContent className='px-4 py-5' showCloseButton={false}>
@@ -32,11 +37,19 @@ function ActionPopover({ product }: Modalprops) {
 
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogTrigger>
-          <Trash2 size={22} color='red' />
+          <Trash2 size={22} color='red' className='hover:cursor-pointer' />
         </DialogTrigger>
 
-        <DialogContent showCloseButton={false}>
-          <DeleteModal product={product} />
+        <DialogContent
+          showCloseButton={false}
+          onInteractOutside={isOverlayDisabled}
+        >
+          <DeleteModal
+            product={product}
+            isDeleting={isDeleting}
+            setIsDeleting={setIsDeleting}
+            onOpenChange={setIsDeleteModalOpen}
+          />
         </DialogContent>
       </Dialog>
     </div>
