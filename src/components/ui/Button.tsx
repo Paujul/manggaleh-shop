@@ -7,11 +7,12 @@ type ButtonProps = {
   className?: string
   dropdown?: boolean
   onClick?: MouseEventHandler<HTMLButtonElement>
+  disabled?: boolean
 }
 
-function Button({ children, className, dropdown, onClick }: ButtonProps) {
+function Button({ children, className, dropdown, ...rest }: ButtonProps) {
   return (
-    <button className={cn('button', className)} onClick={onClick}>
+    <button className={cn('button', className)} {...rest}>
       {children}
 
       {dropdown && <ChevronDown size={20} color='var(--color-gray-400)' />}
