@@ -33,7 +33,6 @@ export default function Form({
   isEdit,
   product,
 }: FormProps) {
-  console.log(isEdit)
   const createProduct = useCreateProduct()
   const editProduct = useEditProduct()
   const {
@@ -93,12 +92,8 @@ export default function Form({
       try {
         let replacedImage
         if (imgFile) {
-          replacedImage = await handleImageDelete(
-            product?.imgPublicId,
-            product?.imgDeleteToken,
-            imgFile,
-            setUploadProgress
-          )
+          await handleImageDelete(product?.imgPublicId, setUploadProgress)
+          replacedImage = await handleImageUpload(imgFile, setUploadProgress)
         }
 
         if (!replacedImage) {
