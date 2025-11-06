@@ -16,7 +16,7 @@ function Button({ children, className, dropdown, ...rest }: ButtonProps) {
     <button className={cn('button', className)} {...rest}>
       {children}
 
-      {dropdown && <ChevronDown size={20} color='var(--color-gray-400)' />}
+      {dropdown && <ChevronDown size={20} color='var(--color-gray-400)' className='shrink-0' />}
     </button>
   )
 }
