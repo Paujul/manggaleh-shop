@@ -1,6 +1,7 @@
 import { useGetProductList } from '@/services/queries/useGetProduct'
-import ProductTableSection from './section'
+
 import ProductDashboardToolbar from './ProductDashboardToolbar'
+import ProductTableSection from './section'
 
 // Ini ntar yg diisi compound component
 function ProductDashboardTable() {
@@ -8,7 +9,7 @@ function ProductDashboardTable() {
 
   if (isLoading) return <span>Loading</span>
   return (
-    <div className='bg-white rounded-lg w-full p-5 flex flex-col gap-5'>
+    <div className='flex w-full flex-col gap-5 rounded-lg bg-white p-5'>
       <ProductDashboardToolbar />
 
       <ProductTableSection products={data ?? []} />

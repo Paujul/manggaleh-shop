@@ -1,11 +1,12 @@
+import { type Dispatch, type SetStateAction, useState } from 'react'
+import { LoaderCircle } from 'lucide-react'
+
 import { useDeleteProduct } from '@/services/mutations/useDeleteProduct'
+import { handleImageDelete } from '../form/handleImageDelete'
+import type { UploadProgressState } from '../form/handleImageUpload'
 import type { ModalProps } from '../product/dashboard/table/section/ActionPopover'
 import Button from '../ui/Button'
 import { DialogDescription, DialogTitle } from '../ui/dialog'
-import { handleImageDelete } from '../form/handleImageDelete'
-import { useState, type Dispatch, type SetStateAction } from 'react'
-import type { UploadProgressState } from '../form/handleImageUpload'
-import { LoaderCircle } from 'lucide-react'
 
 type DeleteModalProps = ModalProps & {
   isDeleting: boolean
@@ -46,12 +47,12 @@ function DeleteModal({
 
       <span>This action is irreversible</span>
 
-      <div className='flex items-center gap-4 ml-auto'>
+      <div className='ml-auto flex items-center gap-4'>
         <Button onClick={handleCloseModal} disabled={isDeleting}>
           Cancel
         </Button>
         <Button
-          className='text-white bg-black border-black'
+          className='border-black bg-black text-white'
           onClick={() => handleDeleteProduct(product.id)}
         >
           {isDeleting ? <LoaderCircle className='animate-spin' /> : 'Confirm'}

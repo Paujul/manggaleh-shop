@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { X } from 'lucide-react'
+
 import Form from '@/components/form/Form'
 import {
   DialogClose,
@@ -5,8 +8,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import type { Product } from '@/types/product'
-import { X } from 'lucide-react'
-import { useState } from 'react'
 
 export type FormDialogProps = {
   open: boolean
@@ -27,8 +28,8 @@ function FormDialog({
       <DialogDescription className='sr-only'>
         Create a product through this form
       </DialogDescription>
-      <div className='flex justify-center items-center'>
-        <DialogTitle className='text-center text-2xl font-medium flex-1'>
+      <div className='flex items-center justify-center'>
+        <DialogTitle className='flex-1 text-center text-2xl font-medium'>
           {product?.name ? 'Edit Product' : 'Create Product'}
         </DialogTitle>
         <DialogClose>

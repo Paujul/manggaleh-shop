@@ -1,23 +1,25 @@
-import { useForm, type FieldError } from 'react-hook-form'
 import {
-  useState,
   type ChangeEvent,
   type Dispatch,
   type SetStateAction,
+  useState,
 } from 'react'
-import getButtonStyle from './getButtonStyle'
+import { type FieldError, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+
+import { useCreateProduct } from '@/services/mutations/useCreateProduct'
+import { useEditProduct } from '@/services/mutations/useEditProduct'
+import type { Product } from '@/types/product'
+import { cn } from '@/utils/cn'
+import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
+
 import FormImageInput from './FormImageInput'
+import getButtonStyle from './getButtonStyle'
+import { handleImageDelete } from './handleImageDelete'
 import {
   handleImageUpload,
   type UploadProgressState,
 } from './handleImageUpload'
-import { useCreateProduct } from '@/services/mutations/useCreateProduct'
-import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
-import { cn } from '@/utils/cn'
-import { toast } from 'sonner'
-import type { Product } from '@/types/product'
-import { handleImageDelete } from './handleImageDelete'
-import { useEditProduct } from '@/services/mutations/useEditProduct'
 
 type FormProps = FormDialogProps & {
   setFormStatus: Dispatch<SetStateAction<boolean>>
@@ -151,24 +153,26 @@ export default function Form({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='flex flex-col gap-3 max-w-lg rounded-lg'
+      className='flex max-w-lg flex-col gap-3 rounded-lg'
     >
-      <div className='flex flex-col gap-1 '>
+      <div className='flex flex-col gap-1'>
         <label htmlFor='name'>Product Name</label>
         <input
           type='text'
-          className='border-2 rounded-lg border-gray-400 py-1 px-2'
+          className='rounded-lg border-2 border-gray-400 px-2 py-1'
           id='name'
           autoComplete='off'
           defaultValue={product?.name}
           {...register('name', { required: true })}
         />
-        {errors.name && <span className='text-red-500'>*Error</span>}
+        {errors.name && (
+          <span className='text-red-500'>*Field is required</span>
+        )}
       </div>
-      <div className='flex flex-col gap-1 relative'>
+      <div className='relative flex flex-col gap-1'>
         <label htmlFor='price'>Price</label>
         <input
-          className='border-2 rounded-lg border-gray-400 py-1 pl-7 pr-2'
+          className='rounded-lg border-2 border-gray-400 py-1 pr-2 pl-7'
           id='price'
           type='number'
           autoComplete='off'
@@ -180,14 +184,16 @@ export default function Form({
             valueAsNumber: true,
           })}
         />
-        {errors.price && <span className='text-red-500'>*Error</span>}
-        <span className='absolute left-2 top-8.5'>Rp</span>
+        {errors.price && (
+          <span className='text-red-500'>*Field is required</span>
+        )}
+        <span className='absolute top-8.5 left-2'>Rp</span>
       </div>
-      <div className='flex flex-col gap-1 '>
+      <div className='flex flex-col gap-1'>
         <label htmlFor='qty'>Qty</label>
 
         <input
-          className='border-2 rounded-lg border-gray-400 py-1 px-2'
+          className='rounded-lg border-2 border-gray-400 px-2 py-1'
           id='qty'
           type='number'
           autoComplete='off'
@@ -199,7 +205,7 @@ export default function Form({
             valueAsNumber: true,
           })}
         />
-        {errors.qty && <span className='text-red-500'>*Error</span>}
+        {errors.qty && <span className='text-red-500'>*Field is required</span>}
       </div>
 
       <FormImageInput
@@ -212,7 +218,7 @@ export default function Form({
       <button
         type='submit'
         className={cn(
-          'hover:cursor-pointer p-3 rounded-lg font-medium text-xl',
+          'rounded-lg p-3 text-xl font-medium hover:cursor-pointer',
           createProduct.isPending || (isUploading && 'hover:cursor-not-allowed')
         )}
         style={getButtonStyle(isIdleState, clampedProgress)}

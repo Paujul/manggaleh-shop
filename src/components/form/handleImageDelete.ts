@@ -1,7 +1,9 @@
 import axios from 'axios'
-import type { UploadProgressState } from './handleImageUpload'
 import type { Dispatch, SetStateAction } from 'react'
+
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@/constants/env'
+
+import type { UploadProgressState } from './handleImageUpload'
 
 export async function handleImageDelete(
   oldPublicId: string | undefined,

@@ -1,6 +1,7 @@
-import { cn } from '@/utils/cn'
 import { ChevronDown } from 'lucide-react'
 import type { MouseEventHandler, ReactNode } from 'react'
+
+import { cn } from '@/utils/cn'
 
 type ButtonProps = {
   children: ReactNode

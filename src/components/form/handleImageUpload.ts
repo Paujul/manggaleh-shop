@@ -1,6 +1,7 @@
-import { CLOUDINARY_CLOUD_NAME } from '@/constants/env'
 import axios from 'axios'
 import type { Dispatch, SetStateAction } from 'react'
+
+import { CLOUDINARY_CLOUD_NAME } from '@/constants/env'
 
 export type UploadProgressState = {
   percent: number

@@ -1,5 +1,6 @@
-import type { Product } from '@/types/product'
 import { Bookmark } from 'lucide-react'
+
+import type { Product } from '@/types/product'
 
 type ProductProps = {
   product: Product
@@ -11,18 +12,18 @@ export default function ProductCard({ product }: ProductProps) {
   }
 
   return (
-    <div className='min-w-[200px] min-h-64 shadow-md rounded-lg flex flex-col gap-5 p-3 bg-white'>
+    <div className='flex min-h-64 min-w-[200px] flex-col gap-5 rounded-lg bg-white p-3 shadow-md'>
       <figure>
         <img
-          src='https://images.pexels.com/photos/25740960/pexels-photo-25740960.jpeg'
+          src={product.imgUrl ? product.imgUrl : '/no-image.jpg'}
           alt='Product Image'
-          className='object-contain max-h-52 w-full bg-gray-200'
+          className='max-h-52 w-full bg-gray-200 object-contain'
         />
       </figure>
 
       <div className='flex flex-col gap-2'>
-        <div className='flex items-center text-sm gap-2'>
-          <Bookmark className='size-5 inline hover:cursor-pointer' />
+        <div className='flex items-center gap-2 text-sm'>
+          <Bookmark className='inline size-5 hover:cursor-pointer' />
           <span className='font-medium'>{product.rating}</span>
           <span className='text-gray-500'>({product.reviews} reviews)</span>
         </div>

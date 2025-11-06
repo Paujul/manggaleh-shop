@@ -31,10 +31,10 @@ function FormImageInput({
         <img
           src={previewImage || existingImage}
           alt='Preview Image'
-          className='mx-auto mt-2 object-contain h-64'
+          className='mx-auto mt-2 h-64 object-contain'
         />
       ) : (
-        <div className='mx-auto text-gray-400 text-2xl font-medium size-64 border-2 rounded-lg border-dashed my-3 flex items-center justify-center'>
+        <div className='mx-auto my-3 flex size-64 items-center justify-center rounded-lg border-2 border-dashed text-2xl font-medium text-gray-400'>
           Preview Image Here
         </div>
       )}

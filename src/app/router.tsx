@@ -1,8 +1,9 @@
+import { createBrowserRouter } from 'react-router'
+
 import NotFound from '@/components/error/NotFound'
 import AppLayout from '@/components/layout/AppLayout'
 import { FallbackSpinner } from '@/components/layout/FallbackSpinner'
 import { paths } from '@/config/paths'
-import { createBrowserRouter } from 'react-router'
 
 export const appRouter = createBrowserRouter([
   {

@@ -1,4 +1,5 @@
 import { Calendar, ListFilter, Search } from 'lucide-react'
+
 import Button from '@/components/ui/Button'
 
 function ProductDashboardToolbar() {
@@ -9,13 +10,14 @@ function ProductDashboardToolbar() {
           type='text'
           name='product-search'
           placeholder='Search...'
-          className='border-2 rounded-lg border-gray-300 pl-4 py-1 pr-7'
+          autoComplete='off'
+          className='rounded-lg border-2 border-gray-300 py-1 pr-7 pl-4'
         />
-        <Search className='absolute right-2 top-[7px] size-5 text-gray-400' />
+        <Search className='absolute top-[7px] right-2 size-5 text-gray-400' />
       </div>
 
       {/* Dropdowns */}
-      <div className='flex text-sm gap-3' id='dropdowns'>
+      <div className='flex gap-3 text-sm' id='dropdowns'>
         <Button className='flex items-center gap-2' dropdown>
           <Calendar className='size-4' />
           <span>12 Sep - 28 Oct 2025</span>

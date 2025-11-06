@@ -1,16 +1,17 @@
+import { useState } from 'react'
+import { Download, FileText, Plus } from 'lucide-react'
+
 import Button from '@/components/ui/Button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
-import { Download, FileText, Plus } from 'lucide-react'
 import FormDialog from './table/section/FormDialog'
-import { useState } from 'react'
 
 export default function ProductDashboardHeader() {
   const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false)
 
   return (
     <div className='flex items-center justify-between py-5'>
-      <h1 className='font-semibold text-2xl'>Product List</h1>
+      <h1 className='text-2xl font-semibold'>Product List</h1>
 
       <div className='flex gap-3'>
         <Button className='flex items-center justify-center gap-1 bg-white'>
@@ -24,7 +25,7 @@ export default function ProductDashboardHeader() {
 
         <Dialog open={isFormModalOpen} onOpenChange={setIsFormModalOpen}>
           <DialogTrigger>
-            <div className='button flex items-center justify-center gap-1 bg-black border-0'>
+            <div className='button flex items-center justify-center gap-1 border-0 bg-black'>
               <Plus size={16} color='white' />
               <span className='text-white'>Add Product</span>
             </div>

@@ -1,4 +1,5 @@
 import type { Product } from '@/types/product'
+
 import { ProductTable } from './Header'
 import { Row } from './Row'
 

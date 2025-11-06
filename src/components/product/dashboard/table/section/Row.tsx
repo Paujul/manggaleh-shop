@@ -1,11 +1,12 @@
-import type { Product } from '@/types/product'
-import { Cell } from './Cell'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import type { Product } from '@/types/product'
+
 import ActionPopover from './ActionPopover'
+import { Cell } from './Cell'
 
 type AppProps = {
   product: Product
@@ -17,19 +18,15 @@ export const Row = ({ product }: AppProps) => {
   }
 
   return (
-    <div className='p-5 rounded-t-lg flex gap-5 items-center text-[#5C5C5C]'>
-      <div className='size-5 border-2 border-gray-500 rounded-sm' />
-      <Cell className='flex-[2] min-w-0 flex gap-2 items-center'>
+    <div className='flex items-center gap-5 rounded-t-lg p-5 text-[#5C5C5C]'>
+      <div className='size-5 rounded-sm border-2 border-gray-500' />
+      <Cell className='flex min-w-0 flex-[2] items-center gap-2'>
         <img
-          src={
-            product.imgUrl
-              ? product.imgUrl
-              : 'https://images.pexels.com/photos/25740960/pexels-photo-25740960.jpeg'
-          }
+          src={product.imgUrl ? product.imgUrl : '/no-image.jpg'}
           alt='Product Image'
-          className='object-cover rounded-lg size-10 shrink-0'
+          className='size-10 shrink-0 rounded-lg object-cover'
         />
-        <span className='break-words whitespace-pre-wrap overflow-hidden line-clamp-2'>
+        <span className='line-clamp-2 overflow-hidden break-words whitespace-pre-wrap'>
           {product.name}
         </span>
       </Cell>

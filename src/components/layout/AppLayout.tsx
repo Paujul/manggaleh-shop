@@ -1,10 +1,12 @@
 import { Outlet } from 'react-router'
-import Navbar from './Navbar'
-import Footer from './Footer'
+
 import { Toaster } from '../ui/sonner'
 
+import Footer from './Footer'
+import Navbar from './Navbar'
+
 const AppLayout = () => (
-  <div className='bg-[#F7F7F6] min-h-[100dvh] flex flex-col'>
+  <div className='flex min-h-[100dvh] flex-col bg-[#F7F7F6]'>
     <Navbar />
     <Outlet />
     <Footer />

@@ -1,9 +1,11 @@
+import { useState } from 'react'
+import { SquarePen, Trash2 } from 'lucide-react'
+
+import DeleteModal from '@/components/modal/DeleteModal'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import type { Product } from '@/types/product'
-import { SquarePen, Trash2 } from 'lucide-react'
+
 import FormDialog from './FormDialog'
-import { useState } from 'react'
-import DeleteModal from '@/components/modal/DeleteModal'
 
 export type ModalProps = {
   product: Product

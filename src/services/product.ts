@@ -1,4 +1,4 @@
-import type { Product, CreateProductPayload } from '../types/product'
+import type { CreateProductPayload, Product } from '../types/product'
 import supabase from '../utils/supabase'
 
 export async function getProductList(): Promise<Product[]> {
