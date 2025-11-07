@@ -65,26 +65,52 @@ export default function Form({
    */
   const isUploading = !idleStates.includes(uploadProgress.label)
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImgFile(e.target.files[0])
-      setPreviewImage(URL.createObjectURL(e.target.files[0]))
-      setUploadProgress({ percent: 0, label: 'Submit' })
+  const acceptedFormats = ['jpg', 'jpeg', 'png']
+  const maxSize = 5 * 1024 * 1024 // 5MB
+
+  const validateImageFile = (file?: File) => {
+    if (!file) return null
+    const fileExtension = file.name.split('.').pop()?.toLowerCase()
+    if (!fileExtension || !acceptedFormats.includes(fileExtension)) {
+      return 'Invalid file format. Accepted formats: jpg, jpeg, png'
     }
+    if (file.size > maxSize) {
+      return 'Size must be within 5MB'
+    }
+    return null
+  }
+
+  const resetImageState = () => {
+    setImgFile(undefined)
+    setPreviewImage(undefined)
+    setUploadProgress({ percent: 0, label: 'Submit' })
+  }
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+
+    if (!file) {
+      resetImageState()
+      return
+    }
+
+    const validationMessage = validateImageFile(file)
+    if (validationMessage) {
+      resetImageState()
+      e.target.value = ''
+      toast.error(validationMessage)
+      return
+    }
+
+    setImgFile(file)
+    setPreviewImage(URL.createObjectURL(file))
+    setUploadProgress({ percent: 0, label: 'Submit' })
   }
 
   const imageField = register('imgFile', {
     validate: (files) => {
-      const acceptedFormats = ['jpg', 'jpeg', 'png']
-      const fileExtension = files?.[0]?.name?.split('.').pop()?.toLowerCase()
-      if (fileExtension && !acceptedFormats.includes(fileExtension)) {
-        return 'Invalid file format. Accepted formats: jpg, jpeg, png'
-      }
-      const maxSize = 5 * 1024 * 1024 // 5MB
-      if (files?.[0] && files[0].size > maxSize) {
-        return 'Size must be within 5MB'
-      }
-      return true
+      const validationMessage = validateImageFile(files?.[0])
+      return validationMessage ?? true
     },
     onChange: (event) => handleImageChange(event),
   })
