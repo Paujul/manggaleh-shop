@@ -13,19 +13,21 @@ import type { Product } from '@/types/product'
 import { cn } from '@/utils/cn'
 import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
 
-import FormImageInput from './FormImageInput'
+import { formInputConfig } from './functions/formInputConfigs'
 import getButtonStyle from './functions/getButtonStyle'
 import { handleImageDelete } from './functions/handleImageDelete'
 import {
   handleImageUpload,
   type UploadProgressState,
 } from './functions/handleImageUpload'
+import FormFieldInput from './inputs/FormFieldInput'
+import FormImageInput from './inputs/FormImageInput'
 
 type FormProps = FormDialogProps & {
   setFormStatus: Dispatch<SetStateAction<boolean>>
 }
 
-type ProductFormData = Omit<Product, 'id' | 'imgUrl'> & {
+export type ProductFormData = Omit<Product, 'id' | 'imgUrl'> & {
   imgFile?: FileList
 }
 
@@ -181,58 +183,32 @@ export default function Form({
       onSubmit={handleSubmit(onSubmit)}
       className='flex max-w-lg flex-col gap-3 rounded-lg'
     >
-      <div className='flex flex-col gap-1'>
-        <label htmlFor='name'>Product Name</label>
-        <input
-          type='text'
-          className='rounded-lg border-2 border-gray-400 px-2 py-1'
-          id='name'
-          autoComplete='off'
-          defaultValue={product?.name}
-          {...register('name', { required: true })}
-        />
-        {errors.name && (
-          <span className='text-red-500'>*Field is required</span>
-        )}
-      </div>
-      <div className='relative flex flex-col gap-1'>
-        <label htmlFor='price'>Price</label>
-        <input
-          className='rounded-lg border-2 border-gray-400 py-1 pr-2 pl-7'
-          id='price'
-          type='number'
-          autoComplete='off'
-          defaultValue={product?.price}
-          {...register('price', {
-            required: true,
-            maxLength: 7,
-            min: 0,
-            valueAsNumber: true,
-          })}
-        />
-        {errors.price && (
-          <span className='text-red-500'>*Field is required</span>
-        )}
-        <span className='absolute top-8.5 left-2'>Rp</span>
-      </div>
-      <div className='flex flex-col gap-1'>
-        <label htmlFor='qty'>Qty</label>
+      <FormFieldInput
+        label='name'
+        defaultValue={product?.name}
+        inputConfig={formInputConfig.name}
+        register={register}
+      />
+      {errors.name && <span className='text-red-500'>*Field is required</span>}
 
-        <input
-          className='rounded-lg border-2 border-gray-400 px-2 py-1'
-          id='qty'
-          type='number'
-          autoComplete='off'
-          defaultValue={product?.qty}
-          {...register('qty', {
-            required: true,
-            maxLength: 3,
-            min: 0,
-            valueAsNumber: true,
-          })}
-        />
-        {errors.qty && <span className='text-red-500'>*Field is required</span>}
-      </div>
+      <FormFieldInput
+        label='price'
+        defaultValue={product?.price}
+        inputConfig={formInputConfig.price}
+        register={register}
+        type='number'
+        price
+      />
+      {errors.price && <span className='text-red-500'>*Field is required</span>}
+
+      <FormFieldInput
+        label='qty'
+        defaultValue={product?.qty}
+        inputConfig={formInputConfig.qty}
+        register={register}
+        type='number'
+      />
+      {errors.qty && <span className='text-red-500'>*Field is required</span>}
 
       <FormImageInput
         imageField={imageField}
