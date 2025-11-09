@@ -29,7 +29,7 @@ function Navbar() {
     <nav className='flex h-16 items-center bg-white'>
       <div className='container mx-auto flex items-center justify-between'>
         <Link to={paths.home.path}>
-          <h1 className='text-2xl font-bold'>Manggaleh Shop</h1>
+          <h2 className='text-2xl font-bold'>Manggaleh Shop</h2>
         </Link>
 
         <div className='relative'>

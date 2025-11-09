@@ -18,9 +18,14 @@ function ProductDashboardToolbar() {
 
       {/* Dropdowns */}
       <div className='flex gap-3 text-sm' id='dropdowns'>
-        <Button className='flex items-center gap-2 md:truncate max-lg:w-36' dropdown>
+        <Button
+          className='flex items-center gap-2 max-lg:w-36 md:truncate'
+          dropdown
+        >
           <Calendar size={20} className='size-5 shrink-0 lg:w-auto' />
-          <span className='md:truncate lg:overflow-auto'>12 Sep - 28 Oct 2025</span>
+          <span className='md:truncate lg:overflow-auto'>
+            12 Sep - 28 Oct 2025
+          </span>
         </Button>
         <Button className='flex items-center gap-1' dropdown>
           Status
