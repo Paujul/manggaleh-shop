@@ -1,3 +1,4 @@
+import type { HTMLInputTypeAttribute } from 'react'
 import type {
   FieldValues,
   Path,
@@ -12,7 +13,7 @@ type ComponentProps<T extends FieldValues> = {
   defaultValue?: string | number
   register: UseFormRegister<T>
   inputConfig: RegisterOptions<T>
-  type?: React.HTMLInputTypeAttribute
+  type?: HTMLInputTypeAttribute
   className?: string
   price?: boolean
 }
