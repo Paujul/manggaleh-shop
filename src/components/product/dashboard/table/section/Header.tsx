@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <div className='flex items-center gap-5 rounded-t-lg bg-[#F7F7F6] p-5 text-sm font-semibold'>
       <div className='size-5 rounded-sm border-2 border-gray-500' />
-      <Cell className='min-w-0 flex-[2]'>Product Name</Cell>
+      <Cell className='flex-[2]'>Product Name</Cell>
       <Cell>Category</Cell>
       <Cell>Stock</Cell>
       <Cell>Price</Cell>

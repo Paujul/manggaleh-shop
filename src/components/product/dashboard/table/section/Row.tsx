@@ -20,7 +20,7 @@ export const Row = ({ product }: AppProps) => {
   return (
     <div className='flex items-center gap-5 rounded-t-lg p-5 text-[#5C5C5C]'>
       <div className='size-5 rounded-sm border-2 border-gray-500' />
-      <Cell className='flex min-w-0 flex-[2] items-center gap-2'>
+      <Cell className='flex flex-[2] basis-0 items-center gap-2'>
         <img
           src={product.imgUrl ? product.imgUrl : '/no-image.jpg'}
           alt='Product Image'
