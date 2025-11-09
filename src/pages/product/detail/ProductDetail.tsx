@@ -17,8 +17,8 @@ function ProductDetail() {
       console.log(field)
       return `${field} not found`
     } else {
-      if (data?.rating === null) return 0
-      if (data?.reviews === null) return 'no'
+      if (field === 'rating' && data?.rating === null) return '-'
+      if (field === 'reviews' && data?.reviews === null) return 'no'
       return data?.[field]
     }
   }
@@ -33,7 +33,7 @@ function ProductDetail() {
         />
       </figure>
 
-      <div className='flex flex-col gap-4'>
+      <div className='flex max-w-96 flex-1 flex-col gap-4'>
         <span className='font-light'>User Name</span>
         <h1 className='text-5xl font-medium'>{getProductField('name')}</h1>
         <p>
