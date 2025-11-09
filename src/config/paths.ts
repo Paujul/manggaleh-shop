@@ -17,5 +17,9 @@ export const paths = {
       path: 'profile',
       getHref: () => '/app/profile',
     },
+    productDetail: {
+      path: '/product/:id',
+      getHref: (id: string | number) => `/product/${id}`,
+    },
   },
 } as const

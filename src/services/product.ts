@@ -8,6 +8,17 @@ export async function getProductList(): Promise<Product[]> {
   return data ?? []
 }
 
+export async function getProductDetail(id: string): Promise<Product> {
+  const { data, error } = await supabase
+    .from('product')
+    .select()
+    .eq('id', id)
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 export async function createProduct(
   payload: CreateProductPayload
 ): Promise<Product | null> {
