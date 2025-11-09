@@ -26,7 +26,11 @@ function ProductDetail() {
   return (
     <div className='container m-auto flex gap-4'>
       <figure className='size-96'>
-        <img src={data?.imgUrl} alt='Product Image' className='size-full' />
+        <img
+          src={data?.imgUrl || '/no-image.jpg'}
+          alt='Product Image'
+          className='size-full'
+        />
       </figure>
 
       <div className='flex flex-col gap-4'>
