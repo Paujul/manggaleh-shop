@@ -2,21 +2,21 @@
 
 [] Product List
     [] Product Card
-        [] Integrate
+        [x] Integrate
         [] Save (Bookmark)
     [] Product Detail
         [] Add more table items (Supabase)
             [] Description
             [] User
-[] Product Form
+[x] Product Form
     [x] Form Input
     [x] Form Validation
     [x] Image Upload
-    [] Validation
-        [] Name
-        [] Price
-        [] Qty
-        [] Image
+    [x] Validation
+        [x] Name
+        [x] Price
+        [x] Qty
+        [x] Image
 [] Enhancements
     [] User
         [] Auth
