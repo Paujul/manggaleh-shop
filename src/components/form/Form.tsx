@@ -14,12 +14,12 @@ import { cn } from '@/utils/cn'
 import type { FormDialogProps } from '../product/dashboard/table/section/FormDialog'
 
 import FormImageInput from './FormImageInput'
-import getButtonStyle from './getButtonStyle'
-import { handleImageDelete } from './handleImageDelete'
+import getButtonStyle from './functions/getButtonStyle'
+import { handleImageDelete } from './functions/handleImageDelete'
 import {
   handleImageUpload,
   type UploadProgressState,
-} from './handleImageUpload'
+} from './functions/handleImageUpload'
 
 type FormProps = FormDialogProps & {
   setFormStatus: Dispatch<SetStateAction<boolean>>
