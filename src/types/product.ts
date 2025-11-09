@@ -8,6 +8,7 @@ export interface Product {
   imgUrl?: string
   imgPublicId: string
   imgDeleteToken: string
+  desc?: string
   created_at: Date
 }
 
