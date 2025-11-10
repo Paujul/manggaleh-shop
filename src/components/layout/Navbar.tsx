@@ -9,7 +9,7 @@ function Navbar() {
       id: 1,
       label: 'Cart',
       icon: <ShoppingCart />,
-      href: '#',
+      href: paths.app.cart.path,
     },
     {
       id: 2,

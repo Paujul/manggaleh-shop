@@ -33,6 +33,12 @@ export const appRouter = createBrowserRouter([
         }),
       },
       {
+        path: paths.app.cart.path,
+        lazy: async () => ({
+          Component: (await import('@/pages/product/cart/Cart')).default,
+        }),
+      },
+      {
         path: '*',
         Component: NotFound,
       },
